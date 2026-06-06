@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>奇點學院 × D11｜品牌視覺方向確認</title>
+<style>
+/* ─── Reset ─── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; }
+body {
+  font-family: -apple-system, 'PingFang TC', 'Helvetica Neue', sans-serif;
+  background: #F0F0EA;
+  color: #0D1B2A;
+}
+
+/* ─── Layout ─── */
+.page { max-width: 1080px; margin: 0 auto; padding: 0 0 80px; }
+
+/* ─── Header ─── */
+.header {
+  background: #0D1B2A;
+  padding: 48px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 64px;
+}
+.header-brand { }
+.header-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #00E5CC;
+  margin-bottom: 10px;
+}
+.header-name {
+  font-size: 38px;
+  font-weight: 900;
+  color: #F5F5F0;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+.header-name span { color: #4B3F72; }
+.header-meta {
+  text-align: right;
+}
+.header-label {
+  font-size: 10px;
+  color: #3a5060;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.header-date {
+  font-size: 13px;
+  color: #6a8090;
+}
+.header-badge {
+  display: inline-block;
+  margin-top: 10px;
+  background: #E8A838;
+  color: #0D1B2A;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: 4px 12px;
+  border-radius: 100px;
+}
+
+/* ─── Section wrapper ─── */
+.section { padding: 0 60px; margin-bottom: 64px; }
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 28px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #ddddd8;
+}
+.section-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: #00E5CC;
+  background: #0D1B2A;
+  padding: 3px 9px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  font-family: monospace;
+}
+.section-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #888;
+}
+
+/* ─── 01 Color System ─── */
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+.color-swatch {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+}
+.swatch-color { height: 100px; }
+.swatch-info { padding: 14px 16px; background: #fff; }
+.swatch-hex {
+  font-size: 13px;
+  font-weight: 800;
+  font-family: monospace;
+  letter-spacing: 0.04em;
+  color: #0D1B2A;
+}
+.swatch-name {
+  font-size: 11px;
+  color: #888;
+  margin-top: 3px;
+  font-weight: 500;
+}
+.swatch-role {
+  font-size: 10px;
+  color: #aaa;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* ─── 02 Usage Ratio ─── */
+.ratio-wrap { }
+.ratio-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #888;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.ratio-bar {
+  display: flex;
+  height: 52px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+}
+.ratio-seg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+.r1 { flex: 60; background: #0D1B2A; color: #F5F5F0; }
+.r2 { flex: 15; background: #4B3F72; color: #F5F5F0; }
+.r3 { flex: 10; background: #F5F5F0; color: #0D1B2A; border: none; }
+.r4 { flex: 10; background: #00E5CC; color: #0D1B2A; }
+.r5 { flex: 5;  background: #E8A838; color: #0D1B2A; }
+.ratio-legend {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+.legend-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.legend-dot-row { display: flex; align-items: center; gap: 8px; }
+.legend-dot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
+.legend-pct { font-size: 13px; font-weight: 800; color: #0D1B2A; }
+.legend-usage { font-size: 10px; color: #999; line-height: 1.4; }
+
+/* ─── 03 Typography ─── */
+.type-demo {
+  background: #0D1B2A;
+  border-radius: 12px;
+  padding: 36px 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+.type-col { }
+.type-label {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #3a5060;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.t-h1 { font-size: 32px; font-weight: 900; color: #F5F5F0; line-height: 1.15; letter-spacing: -0.02em; }
+.t-h1 em { color: #4B3F72; font-style: normal; }
+.t-h2 { font-size: 18px; font-weight: 700; color: #F5F5F0; line-height: 1.3; margin-top: 12px; }
+.t-eyebrow { font-size: 11px; font-weight: 700; color: #00E5CC; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 10px; }
+.t-body { font-size: 14px; color: #8899AA; line-height: 1.7; margin-top: 8px; }
+.t-divider { width: 32px; height: 2px; background: #00E5CC; margin: 14px 0; }
+.t-caption { font-size: 11px; color: #3a5060; letter-spacing: 0.05em; }
+
+/* ─── 04 Components ─── */
+.components-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.comp-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 28px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.comp-label {
+  font-size: 9px;
+  color: #bbb;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  font-weight: 600;
+}
+
+/* Buttons */
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.btn {
+  padding: 10px 22px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  border: none;
+}
+.btn-primary { background: #00E5CC; color: #0D1B2A; }
+.btn-dark { background: #0D1B2A; color: #00E5CC; }
+.btn-outline { background: transparent; color: #0D1B2A; border: 2px solid #0D1B2A; }
+.btn-ghost { background: transparent; color: #4B3F72; border: 2px solid #4B3F72; }
+.btn-gold { background: #E8A838; color: #0D1B2A; }
+
+/* Tags */
+.tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.tag {
+  padding: 5px 13px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+.tag-gold { background: #E8A838; color: #0D1B2A; }
+.tag-dark { background: #0D1B2A; color: #F5F5F0; }
+.tag-teal-outline { background: transparent; border: 1.5px solid #00E5CC; color: #00E5CC; }
+.tag-grape { background: #4B3F72; color: #F5F5F0; }
+.tag-light { background: #F5F5F0; color: #0D1B2A; border: 1px solid #e0e0da; }
+
+/* Nav bar */
+.mock-nav {
+  background: #0D1B2A;
+  padding: 14px 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  justify-content: space-between;
+}
+.nav-brand { font-size: 14px; font-weight: 900; color: #F5F5F0; }
+.nav-brand span { color: #00E5CC; }
+.nav-links { display: flex; gap: 20px; }
+.nav-link { font-size: 11px; color: #8899AA; font-weight: 500; }
+.nav-cta {
+  background: #00E5CC;
+  color: #0D1B2A;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 7px 16px;
+  border-radius: 5px;
+}
+
+/* Course card */
+.course-card {
+  background: #0D1B2A;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.course-img {
+  background: linear-gradient(135deg, #1a2d42 0%, #4B3F72 100%);
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+.course-body { padding: 14px 16px; }
+.course-tag {
+  background: #E8A838;
+  color: #0D1B2A;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 3px 9px;
+  border-radius: 100px;
+  display: inline-block;
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+.course-title { font-size: 13px; font-weight: 800; color: #F5F5F0; line-height: 1.3; margin-bottom: 6px; }
+.course-meta { font-size: 10px; color: #6a8090; margin-bottom: 12px; }
+.course-price {
+  font-size: 18px;
+  font-weight: 900;
+  color: #00E5CC;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.course-price span { font-size: 11px; color: #6a8090; }
+
+/* ─── 05 Hero Section ─── */
+.hero-mock {
+  background: #0D1B2A;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+}
+.hero-nav {
+  background: rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 16px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.hero-nav-brand { font-size: 16px; font-weight: 900; color: #F5F5F0; }
+.hero-nav-brand em { color: #00E5CC; font-style: normal; }
+.hero-nav-links { display: flex; gap: 24px; }
+.hero-nav-link { font-size: 12px; color: #6a8090; }
+.hero-nav-cta {
+  background: #00E5CC;
+  color: #0D1B2A;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 8px 20px;
+  border-radius: 6px;
+}
+.hero-body {
+  padding: 72px 48px 64px;
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 48px;
+  align-items: center;
+}
+.hero-left { }
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,229,204,0.1);
+  border: 1px solid rgba(0,229,204,0.25);
+  padding: 6px 14px;
+  border-radius: 100px;
+  margin-bottom: 24px;
+}
+.hero-eyebrow-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #00E5CC;
+}
+.hero-eyebrow-text {
+  font-size: 11px;
+  color: #00E5CC;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.hero-h1 {
+  font-size: 44px;
+  font-weight: 900;
+  color: #F5F5F0;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+.hero-h1 em { color: #4B3F72; font-style: normal; display: block; }
+.hero-sub {
+  font-size: 16px;
+  color: #8899AA;
+  line-height: 1.7;
+  margin-bottom: 32px;
+  max-width: 420px;
+}
+.hero-actions { display: flex; gap: 12px; align-items: center; }
+.hero-cta-primary {
+  background: #00E5CC;
+  color: #0D1B2A;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 14px 28px;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.hero-cta-secondary {
+  color: #F5F5F0;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.6;
+}
+.hero-tags { display: flex; gap: 8px; margin-top: 24px; }
+.hero-tag {
+  background: rgba(232,168,56,0.15);
+  border: 1px solid rgba(232,168,56,0.3);
+  color: #E8A838;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 100px;
+  letter-spacing: 0.05em;
+}
+
+/* Right: feature card */
+.hero-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 28px;
+}
+.hero-card-title { font-size: 13px; font-weight: 700; color: #F5F5F0; margin-bottom: 16px; }
+.feature-list { list-style: none; }
+.feature-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 12px;
+  color: #8899AA;
+  line-height: 1.5;
+}
+.feature-item:last-child { border-bottom: none; }
+.feature-icon { color: #00E5CC; font-size: 14px; margin-top: 1px; flex-shrink: 0; }
+.feature-name { color: #F5F5F0; font-weight: 600; font-size: 12px; margin-bottom: 2px; }
+.hero-stat-row {
+  display: flex;
+  gap: 24px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.hero-stat { text-align: center; }
+.hero-stat-num { font-size: 22px; font-weight: 900; color: #E8A838; }
+.hero-stat-label { font-size: 10px; color: #6a8090; margin-top: 2px; }
+
+/* ─── 06 Feature Cards Row ─── */
+.cards-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.feat-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 28px 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  border-top: 3px solid transparent;
+}
+.feat-card.accent-teal { border-top-color: #00E5CC; }
+.feat-card.accent-grape { border-top-color: #4B3F72; }
+.feat-card.accent-gold { border-top-color: #E8A838; }
+.feat-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+.feat-icon.teal { background: rgba(0,229,204,0.1); }
+.feat-icon.grape { background: rgba(75,63,114,0.12); }
+.feat-icon.gold { background: rgba(232,168,56,0.12); }
+.feat-title { font-size: 15px; font-weight: 800; color: #0D1B2A; margin-bottom: 8px; }
+.feat-desc { font-size: 12px; color: #888; line-height: 1.6; }
+
+/* ─── 07 Social Mocks ─── */
+.social-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.social-card {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 22px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  position: relative;
+}
+.sc-1 { background: linear-gradient(160deg, #0D1B2A 0%, #1a2d42 60%, #0D1B2A 100%); }
+.sc-2 { background: #F5F5F0; }
+.sc-3 { background: linear-gradient(160deg, #4B3F72 0%, #332b52 100%); }
+.sc-accent-line {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.sc-1 .sc-accent-line { background: #00E5CC; }
+.sc-2 .sc-accent-line { background: #4B3F72; }
+.sc-3 .sc-accent-line { background: #E8A838; }
+.sc-tag {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.sc-1 .sc-tag { color: #00E5CC; }
+.sc-2 .sc-tag {
+  color: #00E5CC;
+  background: #0D1B2A;
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 3px;
+}
+.sc-3 .sc-tag { color: #E8A838; }
+.sc-text { font-size: 18px; font-weight: 900; line-height: 1.3; }
+.sc-1 .sc-text { color: #F5F5F0; }
+.sc-2 .sc-text { color: #0D1B2A; }
+.sc-3 .sc-text { color: #F5F5F0; }
+.sc-meta { font-size: 11px; font-weight: 600; margin-top: 10px; }
+.sc-1 .sc-meta { color: #E8A838; }
+.sc-2 .sc-meta { color: #4B3F72; }
+.sc-3 .sc-meta { color: #00E5CC; }
+
+/* ─── Footer ─── */
+.footer {
+  background: #0D1B2A;
+  padding: 24px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 64px;
+}
+.footer-brand { font-size: 14px; font-weight: 900; color: #F5F5F0; }
+.footer-brand em { color: #00E5CC; font-style: normal; }
+.footer-note { font-size: 11px; color: #3a5060; }
+.footer-tag {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #E8A838;
+  background: rgba(232,168,56,0.1);
+  border: 1px solid rgba(232,168,56,0.2);
+  padding: 5px 12px;
+  border-radius: 100px;
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── HEADER ── -->
+  <div class="header">
+    <div class="header-brand">
+      <div class="header-eyebrow">Brand Visual Direction</div>
+      <div class="header-name">奇點學院<span> × </span>D11</div>
+    </div>
+    <div class="header-meta">
+      <div class="header-label">視覺方向確認稿</div>
+      <div class="header-date">2026.06</div>
+      <div class="header-badge">DRAFT v1</div>
+    </div>
+  </div>
+
+  <!-- ── 01 色系 ── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <span class="section-title">Color System ／ 品牌色系</span>
+    </div>
+    <div class="color-grid">
+      <div class="color-swatch">
+        <div class="swatch-color" style="background:#0D1B2A"></div>
+        <div class="swatch-info">
+          <div class="swatch-hex">#0D1B2A</div>
+          <div class="swatch-name">Ink Black 墨夜藍</div>
+          <div class="swatch-role">主背景 · 深色底</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-color" style="background:#4B3F72"></div>
+        <div class="swatch-info">
+          <div class="swatch-hex">#4B3F72</div>
+          <div class="swatch-name">Vintage Grape 深靛紫</div>
+          <div class="swatch-role">標題 · 卡片背景</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-color" style="background:#F5F5F0; border: 1px solid #e8e8e3"></div>
+        <div class="swatch-info">
+          <div class="swatch-hex">#F5F5F0</div>
+          <div class="swatch-name">Porcelain 瓷白</div>
+          <div class="swatch-role">主要文字 · 淺色底</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-color" style="background:#00E5CC"></div>
+        <div class="swatch-info">
+          <div class="swatch-hex">#00E5CC</div>
+          <div class="swatch-name">Turquoise 電光青</div>
+          <div class="swatch-role">CTA · 連結 · 強調</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-color" style="background:#E8A838"></div>
+        <div class="swatch-info">
+          <div class="swatch-hex">#E8A838</div>
+          <div class="swatch-name">Honey Bronze 琥珀金</div>
+          <div class="swatch-role">標籤 · Icon · 數字</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 02 使用比例 ── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">Usage Ratio ／ 使用比例（深色模式）</span>
+    </div>
+    <div class="ratio-wrap">
+      <div class="ratio-bar">
+        <div class="ratio-seg r1">60%</div>
+        <div class="ratio-seg r2">15%</div>
+        <div class="ratio-seg r3">10%</div>
+        <div class="ratio-seg r4">10%</div>
+        <div class="ratio-seg r5">5%</div>
+      </div>
+      <div class="ratio-legend">
+        <div class="legend-item">
+          <div class="legend-dot-row">
+            <div class="legend-dot" style="background:#0D1B2A"></div>
+            <div class="legend-pct">60%</div>
+          </div>
+          <div class="legend-usage">Ink Black<br>背景主體</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot-row">
+            <div class="legend-dot" style="background:#4B3F72"></div>
+            <div class="legend-pct">15%</div>
+          </div>
+          <div class="legend-usage">Vintage Grape<br>標題 / 卡片</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot-row">
+            <div class="legend-dot" style="background:#F5F5F0;border:1px solid #ddd"></div>
+            <div class="legend-pct">10%</div>
+          </div>
+          <div class="legend-usage">Porcelain<br>文字 / 淺色區</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot-row">
+            <div class="legend-dot" style="background:#00E5CC"></div>
+            <div class="legend-pct">10%</div>
+          </div>
+          <div class="legend-usage">Turquoise<br>CTA / 行動呼籲</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot-row">
+            <div class="legend-dot" style="background:#E8A838"></div>
+            <div class="legend-pct">5%</div>
+          </div>
+          <div class="legend-usage">Honey Bronze<br>標籤 / 裝飾</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 03 文字風格 ── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <span class="section-title">Typography ／ 文字風格</span>
+    </div>
+    <div class="type-demo">
+      <div class="type-col">
+        <div class="type-label">標題組合 Headline</div>
+        <div class="t-eyebrow">奇點學院 × D11</div>
+        <div class="t-h1">從執行者到<em>決策者</em></div>
+        <div class="t-divider"></div>
+        <div class="t-h2">你的奇點就在這裡</div>
+        <div class="t-body">用 AI 重新定義工作方式，讓思維創造超越時間的價值</div>
+      </div>
+      <div class="type-col">
+        <div class="type-label">使用規則 Usage Rule</div>
+        <div class="t-body" style="color:#6a8090; font-size:12px; line-height:1.9;">
+          <span style="color:#00E5CC; font-weight:700;">Eyebrow</span>：全大寫 + 字距 0.2em，用電光青<br>
+          <span style="color:#F5F5F0; font-weight:700;">H1</span>：900 weight，Porcelain，關鍵字換深靛紫<br>
+          <span style="color:#F5F5F0; font-weight:700;">H2</span>：700 weight，Porcelain<br>
+          <span style="color:#8899AA; font-weight:700;">Body</span>：400-500 weight，#8899AA<br>
+          <span style="color:#E8A838; font-weight:700;">Caption</span>：數字、標籤、重點，用琥珀金
+        </div>
+        <div class="t-divider" style="background: #4B3F72;"></div>
+        <div class="t-caption" style="color:#6a8090">「讓思維創造超越時間的價值」</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 04 UI 元件 ── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <span class="section-title">Components ／ 介面元件</span>
+    </div>
+    <div class="components-grid">
+      <div class="comp-card">
+        <div class="comp-label">Button 按鈕</div>
+        <div class="btn-row">
+          <div class="btn btn-primary">立即加入 →</div>
+          <div class="btn btn-dark">了解更多</div>
+          <div class="btn btn-gold">限時優惠</div>
+        </div>
+        <div class="btn-row">
+          <div class="btn btn-outline">查看課程</div>
+          <div class="btn btn-ghost">關於我們</div>
+        </div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-label">Tag ／ Badge 標籤</div>
+        <div class="tag-row">
+          <div class="tag tag-gold">AI 工具</div>
+          <div class="tag tag-dark">奇點課程</div>
+          <div class="tag tag-grape">個人品牌</div>
+        </div>
+        <div class="tag-row">
+          <div class="tag tag-teal-outline">熱銷中</div>
+          <div class="tag tag-light">最新消息</div>
+          <div class="tag tag-gold">限定名額</div>
+        </div>
+      </div>
+      <div class="comp-card" style="grid-column: span 2;">
+        <div class="comp-label">Navigation Bar 導覽列</div>
+        <div class="mock-nav">
+          <div class="nav-brand">奇點學院<span> × D11</span></div>
+          <div class="nav-links">
+            <div class="nav-link">關於我們</div>
+            <div class="nav-link">奇點課程</div>
+            <div class="nav-link">AI 工具庫</div>
+            <div class="nav-link">奇觀異點</div>
+            <div class="nav-link">聯絡我們</div>
+          </div>
+          <div class="nav-cta">免費加入 →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 05 Hero Section ── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <span class="section-title">Hero Section ／ 首頁主視覺</span>
+    </div>
+    <div class="hero-mock">
+      <div class="hero-nav">
+        <div class="hero-nav-brand">奇點學院 <em>× D11</em></div>
+        <div class="hero-nav-links">
+          <div class="hero-nav-link">奇點課程</div>
+          <div class="hero-nav-link">AI 工具庫</div>
+          <div class="hero-nav-link">奇觀異點</div>
+        </div>
+        <div class="hero-nav-cta">免費加入 →</div>
+      </div>
+      <div class="hero-body">
+        <div class="hero-left">
+          <div class="hero-eyebrow">
+            <div class="hero-eyebrow-dot"></div>
+            <div class="hero-eyebrow-text">奇點研究所 × D11</div>
+          </div>
+          <div class="hero-h1">從執行者到<em>決策者</em></div>
+          <div class="hero-sub">用 AI 重新定義工作方式，讓每一個思維奇點，都成為你超越同儕的起跳點</div>
+          <div class="hero-actions">
+            <div class="hero-cta-primary">免費加入奇點研究所 →</div>
+            <div class="hero-cta-secondary">了解更多</div>
+          </div>
+          <div class="hero-tags">
+            <div class="hero-tag">AI 工具實戰</div>
+            <div class="hero-tag">個人品牌建立</div>
+            <div class="hero-tag">奇點課程</div>
+          </div>
+        </div>
+        <div class="hero-card">
+          <div class="hero-card-title" style="color:#8899AA; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; font-weight:600;">奇點學院能帶給你</div>
+          <ul class="feature-list" style="margin-top:12px">
+            <li class="feature-item">
+              <span class="feature-icon">◈</span>
+              <div>
+                <div class="feature-name">AI 工具實戰課程</div>
+                從選工具到落地應用，一步到位
+              </div>
+            </li>
+            <li class="feature-item">
+              <span class="feature-icon">◈</span>
+              <div>
+                <div class="feature-name">個人品牌加速器</div>
+                讓你的知識變成可複製的影響力
+              </div>
+            </li>
+            <li class="feature-item">
+              <span class="feature-icon">◈</span>
+              <div>
+                <div class="feature-name">奇觀異點社群</div>
+                與走在最前面的人一起思考
+              </div>
+            </li>
+          </ul>
+          <div class="hero-stat-row">
+            <div class="hero-stat">
+              <div class="hero-stat-num">2K+</div>
+              <div class="hero-stat-label">社群成員</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-num">12</div>
+              <div class="hero-stat-label">核心課程</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-num">94%</div>
+              <div class="hero-stat-label">學員推薦率</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 06 Feature Cards ── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <span class="section-title">Feature Section ／ 特色卡片（淺色底版本）</span>
+    </div>
+    <div class="cards-row">
+      <div class="feat-card accent-teal">
+        <div class="feat-icon teal">⚡</div>
+        <div class="feat-title">AI 工具實戰</div>
+        <div class="feat-desc">不只是介紹工具，而是教你用 AI 解決真實工作問題，創造可量化的效率提升</div>
+      </div>
+      <div class="feat-card accent-grape">
+        <div class="feat-icon grape">◎</div>
+        <div class="feat-title">個人品牌加速</div>
+        <div class="feat-desc">從定位到內容策略，讓你的專業知識轉化成持續帶來機會的個人資產</div>
+      </div>
+      <div class="feat-card accent-gold">
+        <div class="feat-icon gold">✦</div>
+        <div class="feat-title">奇觀異點社群</div>
+        <div class="feat-desc">你不需要走得最快，只需要走得不一樣——與走在轉型前沿的人一起思考</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 07 Social ── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <span class="section-title">Social Assets ／ 社群素材示意</span>
+    </div>
+    <div class="social-row">
+      <div class="social-card sc-1">
+        <div class="sc-accent-line"></div>
+        <div class="sc-tag">奇觀異點</div>
+        <div class="sc-text">你用 AI 的方式<br>決定你是誰</div>
+        <div class="sc-meta">奇點學院 × D11 →</div>
+      </div>
+      <div class="social-card sc-2">
+        <div class="sc-accent-line"></div>
+        <div class="sc-tag">奇點課程</div>
+        <div class="sc-text">從執行者到決策者<br>只需要一個奇點</div>
+        <div class="sc-meta">— 奇點研究所</div>
+      </div>
+      <div class="social-card sc-3">
+        <div class="sc-accent-line"></div>
+        <div class="sc-tag">AI 工具庫</div>
+        <div class="sc-text">不是學更多<br>是用得不一樣</div>
+        <div class="sc-meta">立刻加入 →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <div class="footer">
+    <div class="footer-brand">奇點學院 <em>× D11</em></div>
+    <div class="footer-note">Brand Visual Direction Draft — 2026.06</div>
+    <div class="footer-tag">請確認方向後回覆</div>
+  </div>
+
+</div>
+</body>
+</html>
