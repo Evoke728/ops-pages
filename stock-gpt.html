@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="台股研究員｜AI 驅動的台灣股市投資分析工具，查個股、看籌碼、做健檢">
+<title>台股研究員｜AI 台股分析 GPT</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"Noto Sans TC",sans-serif;background:#0D1117;color:#E2E8F0;line-height:1.8}
+
+  /* Hero */
+  .hero{max-width:680px;margin:0 auto;padding:72px 28px 48px}
+  .badge{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.08em;color:#F0A500;background:rgba(240,165,0,.12);border:1px solid rgba(240,165,0,.3);border-radius:20px;padding:4px 12px;margin-bottom:20px}
+  .hero h1{font-size:36px;font-weight:800;color:#F5F7FA;letter-spacing:-.02em;margin-bottom:14px}
+  .hero p{font-size:17px;color:rgba(226,232,240,0.65);max-width:520px;line-height:1.75}
+
+  .cta-row{margin-top:32px;display:flex;gap:12px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:600;text-decoration:none;transition:all .2s}
+  .btn-primary{background:#F0A500;color:#0D1117}
+  .btn-primary:hover{background:#FFB800;transform:translateY(-1px)}
+  .btn-ghost{background:transparent;color:#E2E8F0;border:1.5px solid rgba(226,232,240,0.2)}
+  .btn-ghost:hover{border-color:#F0A500;color:#F0A500}
+
+  /* Section */
+  .section{max-width:680px;margin:0 auto;padding:0 28px 56px}
+  .section-label{font-size:12px;font-weight:700;letter-spacing:.12em;color:#7DD3FC;text-transform:uppercase;margin-bottom:20px}
+
+  /* Feature grid */
+  .features{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:520px){.features{grid-template-columns:1fr}}
+  .feature{background:#161B27;border:1.5px solid #1E2635;border-radius:14px;padding:20px 22px}
+  .feature-icon{font-size:24px;margin-bottom:10px}
+  .feature-title{font-size:15px;font-weight:700;color:#F5F7FA;margin-bottom:6px}
+  .feature-desc{font-size:13px;color:rgba(226,232,240,0.5);line-height:1.65}
+
+  /* Starters */
+  .starters{display:flex;flex-direction:column;gap:10px}
+  .starter{background:#161B27;border:1.5px solid #1E2635;border-radius:10px;padding:14px 18px;font-size:14px;color:rgba(226,232,240,0.75);cursor:default;transition:border-color .2s}
+  .starter:hover{border-color:#F0A500;color:#E2E8F0}
+
+  /* Divider */
+  hr{border:none;border-top:1px solid #1E2635;max-width:680px;margin:0 28px 48px}
+
+  /* Footer */
+  .footer{max-width:680px;margin:0 auto;padding:0 28px 60px;font-size:13px;color:rgba(226,232,240,0.3)}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="badge">GPTs · 台股</div>
+  <h1>台股研究員</h1>
+  <p>台灣股市的隨身分析師。查個股基本面、法人籌碼、財報數據，給出有根據的方向觀點，並能幫你做整體持倉的健檢——告訴你現在狀況如何、哪裡要調整。</p>
+  <div class="cta-row">
+    <a href="https://chatgpt.com/g/PLACEHOLDER" class="btn btn-primary">
+      開啟 GPT ↗
+    </a>
+    <a href="https://finmindtrade.com" target="_blank" class="btn btn-ghost">
+      申請 FinMind Token
+    </a>
+  </div>
+</div>
+
+<hr>
+
+<!-- Features -->
+<div class="section">
+  <div class="section-label">六大功能</div>
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">📊</div>
+      <div class="feature-title">個股基本資料</div>
+      <div class="feature-desc">股價走勢、本益比、殖利率、股價淨值比、月營收 YoY</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📈</div>
+      <div class="feature-title">技術分析輔助</div>
+      <div class="feature-desc">趨勢判讀、量價關係、關鍵支撐與壓力位</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🏦</div>
+      <div class="feature-title">法人籌碼分析</div>
+      <div class="feature-desc">三大法人買賣超、外資持股比例變化、籌碼方向</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📋</div>
+      <div class="feature-title">財報與財務分析</div>
+      <div class="feature-desc">損益表趨勢、毛利率、EPS 逐季變化、財務健康度</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🌐</div>
+      <div class="feature-title">近期市場事件</div>
+      <div class="feature-desc">Fed 動向、地緣政治、AI 產業消息、台股族群影響分析</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🩺</div>
+      <div class="feature-title">股票健檢</div>
+      <div class="feature-desc">記住你的持倉，綜合評估整體狀況，給出具體調整建議</div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- Conversation Starters -->
+<div class="section">
+  <div class="section-label">快速啟動</div>
+  <div class="starters">
+    <div class="starter">📊 查台積電（2330）的現況，給我你的方向觀點</div>
+    <div class="starter">🩺 幫我做股票健檢</div>
+    <div class="starter">🌐 最近有什麼重要事件會影響台股走向？</div>
+    <div class="starter">🏦 聯發科（2454）的法人籌碼最近怎麼動？</div>
+  </div>
+</div>
+
+<hr>
+
+<!-- Footer -->
+<div class="footer">
+  以上分析為資訊研究用途，不構成投資建議。投資有風險，請自行判斷。<br>
+  數據來源：FinMind API · 台灣交易所（TWSE/TPEX）
+</div>
+
+</body>
+</html>
