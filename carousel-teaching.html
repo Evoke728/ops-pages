@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>輪播貼文生成工具｜教學簡報</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d0d0d; --bg2:#141414; --line:#262626;
+    --text:#f5f5f5; --muted:#888888; --muted2:#555555;
+    --accent:#e63a2e; --orange:#f07f1a; --champagne:#d8c9a3; --navy:#14213a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;background:#000;color:var(--text);
+    font-family:'Noto Sans TC',sans-serif;overflow:hidden}
+  .serif{font-family:'Noto Serif TC',serif}
+
+  /* 16:9 fixed canvas, scaled to fit viewport */
+  #viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  #scaler{width:1280px;height:720px;position:relative;overflow:hidden;
+    transform-origin:center center;background:var(--bg)}
+  #track{display:flex;height:100%;transition:transform .5s cubic-bezier(.7,0,.2,1)}
+  .slide{flex:0 0 1280px;width:1280px;height:720px;position:relative;
+    display:flex;flex-direction:column;justify-content:center;padding:72px 96px}
+
+  /* chrome */
+  .topbar{position:absolute;top:42px;left:96px;right:96px;
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:13px;letter-spacing:.22em;text-transform:uppercase}
+  .topbar .lvl{color:var(--accent);font-weight:700;font-family:'Inter',sans-serif}
+  .topbar .tag{color:var(--muted)}
+  .footer{position:absolute;bottom:40px;left:96px;right:96px;
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:13px;color:var(--muted);letter-spacing:.08em}
+  .footer .pg{font-family:'Inter',sans-serif}
+  .footer .pg b{color:var(--text)}
+
+  /* type */
+  .kicker{color:var(--accent);font-weight:700;letter-spacing:.16em;
+    font-size:13px;text-transform:uppercase;font-family:'Inter',sans-serif;margin-bottom:20px}
+  h1.title{font-size:74px;font-weight:900;line-height:1.1;letter-spacing:.01em}
+  h2{font-size:44px;font-weight:900;line-height:1.16;margin-bottom:34px}
+  h2 .hl{color:var(--accent)}
+  .sub{color:var(--muted);font-size:18px;font-weight:300;margin-top:22px;letter-spacing:.04em}
+
+  .step{display:inline-flex;align-items:center;gap:13px;margin-bottom:22px}
+  .step .num{font-family:'Inter',sans-serif;font-weight:700;font-size:14px;
+    color:var(--bg);background:var(--accent);padding:5px 11px;border-radius:4px;letter-spacing:.1em}
+  .step .lbl{color:var(--muted);letter-spacing:.2em;font-size:12px;text-transform:uppercase;font-family:'Inter',sans-serif}
+
+  /* numbered rows */
+  .rows{display:flex;flex-direction:column;gap:20px;max-width:1000px}
+  .row{display:flex;gap:24px;align-items:flex-start}
+  .row .idx{font-family:'Inter',sans-serif;font-weight:700;font-size:23px;color:var(--accent);
+    line-height:1.15;min-width:50px;border-right:2px solid var(--line);padding-right:16px}
+  .row .body .rt{font-size:22px;font-weight:500;line-height:1.4}
+  .row .body .rd{color:var(--muted);font-size:15px;font-weight:300;margin-top:6px;line-height:1.5}
+
+  /* flow */
+  .flow{display:flex;flex-wrap:wrap;gap:13px;max-width:1090px}
+  .flow .f{flex:1 1 150px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:20px 18px}
+  .flow .f .n{font-family:'Inter',sans-serif;color:var(--accent);font-weight:700;font-size:13px;letter-spacing:.1em}
+  .flow .f .t{font-size:18px;font-weight:500;margin-top:9px;line-height:1.3}
+
+  /* two-col compare */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:1090px}
+  .card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;
+    padding:30px 30px;display:flex;flex-direction:column;gap:14px}
+  .card .ct{font-size:23px;font-weight:700}
+  .card .swatch{display:flex;gap:9px;margin:2px 0}
+  .card .swatch span{width:40px;height:40px;border-radius:8px;border:1px solid rgba(255,255,255,.12)}
+  .card .meta{color:var(--muted);font-size:15px;font-weight:300;line-height:1.6}
+  .card .meta b{color:var(--text);font-weight:500}
+
+  /* three cards */
+  .three{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:1110px}
+  .three .card{padding:26px 24px;gap:12px}
+  .three .card .tag{color:var(--accent);font-family:'Inter',sans-serif;font-weight:700;font-size:12px;letter-spacing:.12em}
+  .three .card .ct{font-size:25px}
+  .three .card .meta{font-size:14px}
+
+  /* skeleton chips */
+  .skel{display:flex;flex-direction:column;gap:20px;max-width:1080px}
+  .skel .sk{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+  .skel .sk .name{min-width:90px;color:var(--accent);font-weight:700;font-size:19px}
+  .chip{background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:8px 17px;font-size:15px}
+  .arrow{color:var(--muted2);font-family:'Inter',sans-serif}
+
+  /* big quote */
+  .quote{font-family:'Noto Serif TC',serif;font-weight:700;font-size:46px;line-height:1.3;max-width:1080px}
+  .quote .hl{color:var(--accent)}
+  .avoid{display:flex;gap:13px;flex-wrap:wrap;margin-top:36px}
+  .avoid .a{border:1px solid var(--line);border-radius:8px;padding:11px 19px;color:var(--muted);font-size:16px}
+  .avoid .a b{color:var(--accent);font-weight:700;margin-right:8px}
+
+  /* warning */
+  .warns{display:flex;flex-direction:column;gap:18px;max-width:1040px}
+  .warn{display:flex;gap:20px;align-items:flex-start;background:var(--bg2);
+    border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:24px 28px}
+  .warn .ic{font-size:24px;line-height:1}
+  .warn .wt{font-size:21px;font-weight:500;line-height:1.4}
+  .warn .wd{color:var(--muted);font-size:15px;font-weight:300;margin-top:7px;line-height:1.5}
+  .warn code{font-family:'Inter',monospace;background:#000;color:var(--orange);padding:2px 8px;border-radius:4px;font-size:.9em}
+
+  .closing h1{font-size:60px;font-weight:900;line-height:1.18;max-width:1080px}
+
+  /* nav */
+  .navbtn{position:fixed;top:50%;transform:translateY(-50%);z-index:40;
+    width:48px;height:48px;border-radius:50%;background:rgba(0,0,0,.55);
+    border:1px solid rgba(230,58,46,.5);color:var(--accent);font-size:20px;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;user-select:none}
+  .navbtn:hover{background:rgba(230,58,46,.15)}
+  .navbtn:disabled{opacity:.18;cursor:default}
+  #prev{left:26px}#next{right:26px}
+  #dots{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:40;display:flex;gap:8px}
+  #dots .d{width:8px;height:8px;border-radius:50%;background:#3a3a3a;cursor:pointer;transition:all .25s}
+  #dots .d.on{background:var(--accent);width:22px;border-radius:4px}
+</style>
+</head>
+<body>
+<div id="viewport">
+  <div id="scaler">
+    <div id="track">
+
+      <!-- 1 COVER -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI LEVEL</span><span class="tag">#輪播工具教學</span></div>
+        <div class="kicker">IG CAROUSEL · TEACHING GUIDE</div>
+        <h1 class="title serif">輪播貼文<br>生成工具</h1>
+        <div class="sub">從定位到成品，一條龍完成</div>
+        <div class="footer"><span>@操盤手YC</span><span class="pg"><b>01</b> / 13</span></div>
+      </section>
+
+      <!-- 2 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI LEVEL</span><span class="tag">#輪播工具教學</span></div>
+        <h2 class="serif">這套工具能幫你<span class="hl">做什麼</span></h2>
+        <div class="rows">
+          <div class="row"><div class="idx">01</div><div class="body"><div class="rt">貼進 Chat 的 System Prompt，說「我要做一篇輪播」</div><div class="rd">不需任何額外設定，貼上即用</div></div></div>
+          <div class="row"><div class="idx">02</div><div class="body"><div class="rt">回答幾個問題，建立你自己的 IP 口吻與視覺</div><div class="rd">設定一次，之後每篇沿用</div></div></div>
+          <div class="row"><div class="idx">03</div><div class="body"><div class="rt">自動生成輪播結構與互動 HTML，逐張下載 PNG</div><div class="rd">確認結構後一鍵生成，瀏覽器開啟即可下載</div></div></div>
+        </div>
+        <div class="footer"><span>@操盤手YC</span><span class="pg"><b>02</b> / 13</span></div>
+      </section>
+
+      <!-- 3 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI LEVEL</span><span class="tag">#輪播工具教學</span></div>
+        <h2 class="serif">完整流程，<span class="hl">六步</span>走完</h2>
+        <div class="flow">
+          <div class="f"><div class="n">01</div><div class="t">建立 IP</div></div>
+          <div class="f"><div class="n">02</div><div class="t">選視覺</div></div>
+          <div class="f"><div class="n">03</div><div class="t">選格式</div></div>
+          <div class="f"><div class="n">04</div><div class="t">鉤子檢查</div></div>
+          <div class="f"><div class="n">05</div><div class="t">生成輸出</div></div>
+          <div class="f"><div class="n">06</div><div class="t">下載 PNG</div></div>
+        </div>
+        <div class="sub">每一步都會先跟你確認，確認後才往下走</div>
+        <div class="footer"><span>@操盤手YC</span><span class="pg"><b>03</b> / 13</span></div>
+      </section>
+
+      <!-- 4 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI LEVEL</span><span class="tag">#輪播工具教學</span></div>
+        <div class="step"><span class="num">STEP 1</span><span class="lbl">建立你的 IP</span></div>
+        <h2 class="serif">先回答 <span class="hl">3 題</span>，記住你的口吻</h2>
+        <div class="rows">
+          <div class="row"><div class="idx">Q1</div><div class="body"><div class="rt">你的帳號名稱是？你在幫誰解決什麼問題？</div></div></div>
+          <div class="row"><div class="idx">Q2</div><div class="body"><div class="rt">視覺偏 A 文字敘事型，還是 B 科技商業型？</div></div></div>
+          <div class="row"><div class="idx">Q3</div><div class="body"><div class="rt">主要 CTA 是讓人留言、收藏，還是換資源？</div></div></div>
+        </div>
+        <div class="sub">回答越詳細，文風越精準，之後都可隨時調整</div>
+        <div class="footer"><span>@操盤手YC</span><span class="pg"><b>04</b> / 13</span></div>
+      </section>
+
+      <!-- 5 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI LEVEL</span><span class="tag">#輪播工具教學</span></div>
+        <div class="step"><span class="num">STEP 1</span><span class="lbl">固定顯示元素</span></div>
+        <h2 class="serif">三個元素，設定時<span class="hl">一次收掉</span></h2>
+        <div class="rows">
+          <div class="row"><div class="idx">①</div><div class="body"><div class="rt">帳號 ID</div><div class="rd">就是 Q1 的 @帳號，自動帶到每張頁尾，不另外問</div></div></div>
+          <div class="row"><div class="idx">②</div><div class="body"><div class="rt">固定 Hashtag</div><div class="rd">指定 1–3 個分類標籤 → 顯示為封面小標籤；完整 hashtag 串放 Caption</div></div></div>
+          <div class="row"><div class="idx">③</div><div class="body"><div class="rt">頁碼</div><div class="rd">每張固定顯示右下角 0N / 總數，標準元素不需設定</div></div></div>
+        </div>
+        <div class="footer"><span>@操盤手YC</span><span class="pg"><b>05</b> / 13</span></div>
+      </section>
+
+      <!-- 6 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI LEVEL</span><span class="tag">#輪播工具教學</span></div>
+        <div class="step"><span class="num">STEP 2</span><span class="lbl">選視覺模板</span></div>
+        <h2 class="serif">兩種模板，<span class="hl">選一個</span>就能開始</h2>
+        <div class="cols">
+          <div class="card">
+            <div class="ct">A 文字敘事型</div>
+            <div class="swatch"><span style="background:#0d0d0d"></span><span style="background:#f07f1a"></span></div>
+            <div class="meta">純黑底 + 品牌橘 <b>#F07F1A</b><br>文字為主、大量留白<br><br>最適合：<b>個人故事 · 思維洞見 · 觀點</b></div>
+          </div>
+          <div class="card">
+            <div class="ct">B 科技商業型</div>
+            <div class="swatch"><span style="background:#14213a"></span><span style="background:#d8c9a3"></span></div>
+            <div class="meta">深藍黑 + 香檳金<br>圖表輔助、資料展示<br><br>最適合：<b>教學 · 商業知識 · 數據對比</b></div>
+          </div>
+        </div>
+        <div class="footer"><span>@操盤手YC</span><span class="pg"><b>06</b> / 13</span></div>
+      </section>
+
+      <!-- 7 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI LEVEL</span><span class="tag">#輪播工具教學</span></div>
+        <div class="step"><span class="num">STEP 3</span><span class="lbl">選格式</span></div>
+        <h2 class="serif">收斂成 <span class="hl">3 大類型</span></h2>
+        <div class="three">
+          <div class="card"><div class="tag">STORY</div><div class="ct">故事型</div><div class="meta">個人經歷、關係情感、轉折</div></div>
+          <div class="card"><div class="tag">KNOWLEDGE</div><div class="ct">知識型</div><div class="meta">知識點、步驟、清單、數據</div></div>
+          <div class="card"><div class="tag">OPINION</div><div class="ct">觀點型</div><div class="meta">強烈論點、反直覺、對比、借時事</div></div>
+        </div>
+        <div class="sub">收到素材先判斷屬於哪一類，再套對應結構</div>
+        <div class="footer"><span>@操盤手YC</span><span class="pg"><b>07</b> / 13</span></div>
+      </section>
+
+      <!-- 8 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI LEVEL</span><span class="tag">#輪播工具教學</span></div>
+        <h2 class="serif">三種<span class="hl">骨架</span>，套上就成形</h2>
+        <div class="skel">
+          <div class="sk"><span class="name">故事型</span><span class="chip">封面</span><span class="arrow">→</span><span class="chip">起點</span><span class="arrow">→</span><span class="chip">轉折</span><span class="arrow">→</span><span class="chip">洞見</span><span class="arrow">→</span><span class="chip">CTA</span></div>
+          <div class="sk"><span class="name">知識型</span><span class="chip">封面</span><span class="arrow">→</span><span class="chip">痛點</span><span class="arrow">→</span><span class="chip">解法</span><span class="arrow">→</span><span class="chip">步驟</span><span class="arrow">→</span><span class="chip">CTA</span></div>
+          <div class="sk"><span class="name">觀點型</span><span class="chip">封面</span><span class="arrow">→</span><span class="chip">換角度</span><span class="arrow">→</span><span class="chip">論點</span><span class="arrow">→</span><span class="chip">收尾 + CTA</span></div>
+        </div>
+        <div class="sub">張數依素材密度調整，單張只講一個概念</div>
+        <div class="footer"><span>@操盤手YC</span><span class="pg"><b>08</b> / 13</span></div>
+      </section>
+
+      <!-- 9 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI LEVEL</span><span class="tag">#輪播工具教學</span></div>
+        <div class="step"><span class="num">STEP 4</span><span class="lbl">封面鉤子</span></div>
+        <div class="quote serif">封面那句＝整篇的鉤子<br>一個不認識你的人滑到這張，<span class="hl">會想看下一張嗎</span></div>
+        <div class="avoid">
+          <div class="a"><b>避免</b>太早講結論</div>
+          <div class="a"><b>避免</b>超過兩句</div>
+          <div class="a"><b>避免</b>要想一下才懂</div>
+        </div>
+        <div class="footer"><span>@操盤手YC</span><span class="pg"><b>09</b> / 13</span></div>
+      </section>
+
+      <!-- 10 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI LEVEL</span><span class="tag">#輪播工具教學</span></div>
+        <div class="step"><span class="num">STEP 5</span><span class="lbl">生成與輸出</span></div>
+        <h2 class="serif">先文字、<span class="hl">後加圖</span></h2>
+        <div class="rows">
+          <div class="row"><div class="idx">01</div><div class="body"><div class="rt">先生成純文字版本，內容確認後再加圖</div><div class="rd">結構改起來比加圖後容易</div></div></div>
+          <div class="row"><div class="idx">02</div><div class="body"><div class="rt">輸出互動式 HTML 預覽</div><div class="rd">顯示元素沿用定位設定，不逐篇重問</div></div></div>
+          <div class="row"><div class="idx">03</div><div class="body"><div class="rt">Caption 一起附在 HTML 末尾</div><div class="rd">開場句 → 核心洞見 → 互動句 → CTA → Hashtag</div></div></div>
+        </div>
+        <div class="footer"><span>@操盤手YC</span><span class="pg"><b>10</b> / 13</span></div>
+      </section>
+
+      <!-- 11 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI LEVEL</span><span class="tag">#輪播工具教學</span></div>
+        <div class="step"><span class="num">STEP 6</span><span class="lbl">HTML 預覽功能</span></div>
+        <h2 class="serif">預覽框<span class="hl">必備</span>的四件事</h2>
+        <div class="rows">
+          <div class="row"><div class="idx">◀▶</div><div class="body"><div class="rt">左右箭頭，逐張切換</div></div></div>
+          <div class="row"><div class="idx">⌨</div><div class="body"><div class="rt">鍵盤左右鍵也能切換</div></div></div>
+          <div class="row"><div class="idx">●</div><div class="body"><div class="rt">圓點指示器顯示目前第幾張</div></div></div>
+          <div class="row"><div class="idx">⤓</div><div class="body"><div class="rt">下載此張 / 下載全部，輸出 1080×1350 PNG</div></div></div>
+        </div>
+        <div class="footer"><span>@操盤手YC</span><span class="pg"><b>11</b> / 13</span></div>
+      </section>
+
+      <!-- 12 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI LEVEL</span><span class="tag">#輪播工具教學</span></div>
+        <h2 class="serif">讓下載<span class="hl">真的能用</span>的兩個關鍵</h2>
+        <div class="warns">
+          <div class="warn"><div class="ic">⚠️</div><div><div class="wt">用 Chrome / Safari 在本機開啟 HTML，下載才有效</div><div class="wd">在 Chat 預覽框內點下載按鈕沒反應，是正常現象</div></div></div>
+          <div class="warn"><div class="ic">⚠️</div><div><div class="wt">背景圖用 <code>&lt;img&gt;</code> 絕對定位</div><div class="wd">不要用 CSS <code>background-image</code>，會被瀏覽器沙盒擋掉</div></div></div>
+        </div>
+        <div class="footer"><span>@操盤手YC</span><span class="pg"><b>12</b> / 13</span></div>
+      </section>
+
+      <!-- 13 -->
+      <section class="slide closing">
+        <div class="topbar"><span class="lvl">AI LEVEL</span><span class="tag">#輪播工具教學</span></div>
+        <div class="kicker">START HERE</div>
+        <h1 class="serif">從今天開始<br>你的輪播不用<span style="color:var(--accent)">從零動手</span></h1>
+        <div class="sub">貼上工具 · 回答幾題 · 一條龍生成</div>
+        <div class="footer"><span>@操盤手YC</span><span class="pg"><b>13</b> / 13</span></div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<button id="prev" class="navbtn" aria-label="上一頁">‹</button>
+<button id="next" class="navbtn" aria-label="下一頁">›</button>
+<div id="dots"></div>
+
+<script>
+  const scaler=document.getElementById('scaler');
+  const track=document.getElementById('track');
+  const slides=[...document.querySelectorAll('.slide')];
+  const total=slides.length;
+  const prev=document.getElementById('prev');
+  const next=document.getElementById('next');
+  const dotsWrap=document.getElementById('dots');
+  const W=1280,H=720;
+  let cur=0;
+
+  slides.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='d'+(i===0?' on':'');
+    d.addEventListener('click',()=>goTo(i));
+    dotsWrap.appendChild(d);
+  });
+  const dots=[...dotsWrap.children];
+
+  function fit(){
+    const s=Math.min(window.innerWidth/W, window.innerHeight/H);
+    scaler.style.transform=`scale(${s})`;
+  }
+  window.addEventListener('resize',fit); fit();
+
+  function goTo(n){
+    cur=Math.max(0,Math.min(total-1,n));
+    track.style.transform=`translateX(${-cur*W}px)`;
+    dots.forEach((d,i)=>d.classList.toggle('on',i===cur));
+    prev.disabled=cur===0;
+    next.disabled=cur===total-1;
+  }
+  prev.addEventListener('click',()=>goTo(cur-1));
+  next.addEventListener('click',()=>goTo(cur+1));
+  window.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown'){goTo(cur+1)}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){goTo(cur-1)}
+    else if(e.key==='Home'){goTo(0)}
+    else if(e.key==='End'){goTo(total-1)}
+  });
+  let sx=null;
+  window.addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
+  window.addEventListener('touchend',e=>{
+    if(sx===null)return;
+    const dx=e.changedTouches[0].clientX-sx;
+    if(Math.abs(dx)>50){dx<0?goTo(cur+1):goTo(cur-1)}
+    sx=null;
+  },{passive:true});
+  goTo(0);
+</script>
+</body>
+</html>
