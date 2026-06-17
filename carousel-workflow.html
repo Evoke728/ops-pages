@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI × 輪播貼文工作流｜內訓簡報</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d0d0d; --bg2:#141414; --line:#262626;
+    --text:#f5f5f5; --muted:#c8c2b6; --muted2:#555555;
+    --accent:#e63a2e; --orange:#f07f1a; --champagne:#d8c9a3; --navy:#14213a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;background:#000;color:var(--text);font-family:'Noto Sans TC',sans-serif;overflow:hidden}
+  .serif{font-family:'Noto Serif TC',serif}
+
+  #viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  #scaler{width:1280px;height:720px;position:relative;overflow:hidden;transform-origin:center center;background:var(--bg)}
+  #track{display:flex;height:100%;transition:transform .5s cubic-bezier(.7,0,.2,1)}
+  .slide{flex:0 0 1280px;width:1280px;height:720px;position:relative;
+    display:flex;flex-direction:column;justify-content:center;padding:72px 96px}
+
+  .topbar{position:absolute;top:42px;left:96px;right:96px;display:flex;justify-content:space-between;align-items:center;
+    font-size:13px;letter-spacing:.22em;text-transform:uppercase;z-index:3}
+  .topbar .lvl{color:var(--accent);font-weight:700;font-family:'Inter',sans-serif}
+  .topbar .tag{color:var(--muted)}
+  .footer{position:absolute;bottom:40px;left:96px;right:96px;display:flex;justify-content:space-between;align-items:center;
+    font-size:13px;color:var(--muted);letter-spacing:.08em;z-index:3}
+  .footer .pg{font-family:'Inter',sans-serif}
+  .footer .pg b{color:var(--text)}
+
+  .kicker{color:var(--accent);font-weight:700;letter-spacing:.16em;font-size:13px;text-transform:uppercase;font-family:'Inter',sans-serif;margin-bottom:20px}
+  h1.title{font-size:74px;font-weight:900;line-height:1.1;letter-spacing:.01em}
+  h2{font-size:42px;font-weight:900;line-height:1.16;margin-bottom:30px}
+  h2 .hl{color:var(--accent)}
+  .sub{color:var(--muted);font-size:18px;font-weight:400;margin-top:20px;letter-spacing:.04em;line-height:1.6;max-width:1000px}
+  .lead{font-size:30px;font-weight:700;line-height:1.4;margin-top:6px}
+  .lead .hl{color:var(--accent)}
+
+  .step{display:inline-flex;align-items:center;gap:13px;margin-bottom:20px}
+  .step .num{font-family:'Inter',sans-serif;font-weight:700;font-size:14px;color:var(--bg);background:var(--accent);padding:5px 11px;border-radius:4px;letter-spacing:.1em}
+  .step .lbl{color:var(--muted);letter-spacing:.2em;font-size:12px;text-transform:uppercase;font-family:'Inter',sans-serif}
+
+  .rows{display:flex;flex-direction:column;gap:18px;max-width:1010px}
+  .row{display:flex;gap:22px;align-items:flex-start}
+  .row .idx{font-family:'Inter',sans-serif;font-weight:700;font-size:22px;color:var(--accent);line-height:1.15;min-width:48px;border-right:2px solid var(--line);padding-right:15px}
+  .row .body .rt{font-size:21px;font-weight:500;line-height:1.4}
+  .row .body .rd{color:var(--muted);font-size:15px;font-weight:300;margin-top:5px;line-height:1.5}
+
+  .quote{font-family:'Noto Serif TC',serif;font-weight:700;font-size:46px;line-height:1.3;max-width:1080px}
+  .quote .hl{color:var(--accent)}
+
+  .three{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:1110px}
+  .three .card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:24px 22px;display:flex;flex-direction:column;gap:10px}
+  .three .card .tag{color:var(--accent);font-family:'Inter',sans-serif;font-weight:700;font-size:12px;letter-spacing:.12em}
+  .three .card .ct{font-size:24px;font-weight:700}
+  .three .card .meta{font-size:14px;color:var(--muted);font-weight:300;line-height:1.6}
+
+  /* image placeholder */
+  .ph{display:flex;align-items:center;justify-content:center;border:1.5px dashed #3b3b3b;border-radius:12px;background:#101010;
+    color:#5e5e5e;font-family:'Inter',sans-serif;font-size:12px;letter-spacing:.12em;text-align:center}
+
+  /* two-column split: text left, media right */
+  .split{display:flex;gap:54px;align-items:center;width:100%}
+  .split .ctext{flex:1.05;min-width:0}
+  .split .cmedia{flex:.95;display:flex}
+  .split .cmedia .ph{width:100%;aspect-ratio:16/9}
+  .split .cmedia.logoc{flex:0 0 340px;justify-content:center}
+  .split .cmedia.logoc .ph{width:260px;height:260px}
+  .fade-edge{border:none!important;border-radius:0;box-shadow:inset 0 0 80px 36px var(--bg)}
+  .gptlogo{display:flex;flex-direction:column;align-items:center;gap:22px}
+  .gptlogo svg{width:150px;height:150px}
+  .gptname{font-size:26px;font-weight:700;letter-spacing:.01em;color:#f5f5f5;font-family:'Inter','Noto Sans TC',sans-serif}
+  /* page 5 results montage */
+  .fg5{position:relative;z-index:2;max-width:560px}
+  .proof-montage{position:absolute;right:78px;top:0;bottom:0;width:586px;z-index:1}
+  .pm{position:absolute;border-radius:12px;box-shadow:0 18px 48px rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.1)}
+  .pm1{width:210px;top:42px;left:8px;transform:rotate(-4deg);z-index:1}
+  .pm2{width:210px;top:70px;left:298px;transform:rotate(3.5deg);z-index:2}
+  .pm3{width:322px;top:406px;left:96px;transform:rotate(-1.5deg);z-index:3}
+
+  /* full-bleed background */
+  .has-bg{justify-content:center}
+  .bgph{position:absolute;inset:0;z-index:0;display:flex;align-items:center;justify-content:center;background:#0a0a0a;color:#4d4d4d;
+    font-family:'Inter',sans-serif;font-size:14px;letter-spacing:.15em;
+    background-size:cover;background-position:center;background-repeat:no-repeat}
+  .bgph::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0d0d0d 0%, rgba(13,13,13,.82) 38%, rgba(13,13,13,.28) 100%)}
+  .even-dim .bgph::after{background:rgba(11,11,11,.7)}
+  .has-bg .fg{position:relative;z-index:2}
+
+  /* overview 3-up */
+  .over{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;max-width:1110px}
+  .over .o .on{font-family:'Inter',sans-serif;color:var(--accent);font-weight:700;font-size:13px;letter-spacing:.1em;margin-bottom:10px}
+  .over .o .ph{height:262px;width:100%;margin-bottom:14px;border:1px solid var(--line);border-radius:10px;background-color:#0c0c0c;background-size:contain;background-repeat:no-repeat;background-position:center}
+  .over .o .ot{font-size:19px;font-weight:700}
+  .over .o .od{color:var(--muted);font-size:14px;font-weight:300;margin-top:4px;line-height:1.5}
+
+  /* template: compact A/B explainer + real cards */
+  .tpl-rows{display:grid;grid-template-columns:1fr 1fr;gap:34px;max-width:1130px}
+  .tpl-row{display:flex;align-items:center;gap:22px}
+  .tpl-row .tpl-desc{flex:1;min-width:0}
+  .tpl-row .tpl-desc .tn{font-size:23px;font-weight:700}
+  .tpl-row .tpl-desc .td{color:var(--muted);font-size:15px;font-weight:400;margin-top:10px;line-height:1.75}
+  .tpl-row .tpl-pic{width:224px;height:280px;border-radius:8px;background-size:cover;background-position:center;flex-shrink:0;border:1px solid rgba(255,255,255,.08)}
+  .fmt-text{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;max-width:1130px}
+  .fmt-text .ftc{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:24px 24px}
+  .fmt-text .ftt{color:var(--accent);font-family:'Inter',sans-serif;font-weight:700;font-size:12px;letter-spacing:.12em}
+  .fmt-text .ftn{font-size:24px;font-weight:700;margin:5px 0 4px}
+  .fmt-text .ftu{color:var(--muted);font-size:13px;margin-bottom:16px}
+  .fmt-text .ftl{display:flex;flex-direction:column;gap:19px}
+  .fmt-text .ftl>div{font-size:15px;line-height:1.6;color:var(--muted)}
+  .fmt-text .ftl b{color:var(--text);font-weight:700;margin-right:10px;display:inline-block;min-width:40px}
+
+  /* format cards with thumbnail */
+  .fmt{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1110px}
+  .fmt .card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+  .fmt .card .ph{aspect-ratio:4/5;width:100%;border:none;border-radius:0;border-bottom:1px solid var(--line);max-height:240px}
+  .fmt .card .fb{padding:16px 20px}
+  .fmt .card .ft{color:var(--accent);font-family:'Inter',sans-serif;font-weight:700;font-size:12px;letter-spacing:.1em}
+  .fmt .card .fn{font-size:22px;font-weight:700;margin:5px 0 8px}
+  .fmt .card .fs{color:var(--muted);font-size:13px;font-weight:300;line-height:1.5}
+
+  .note{margin-top:22px;border-left:3px solid var(--accent);background:var(--bg2);padding:14px 20px;border-radius:8px;font-size:16px;color:var(--text);max-width:1000px;line-height:1.5}
+  .note b{color:var(--accent)}
+
+  .navbtn{position:fixed;top:50%;transform:translateY(-50%);z-index:40;width:48px;height:48px;border-radius:50%;background:rgba(0,0,0,.55);
+    border:1px solid rgba(230,58,46,.5);color:var(--accent);font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;user-select:none}
+  .navbtn:hover{background:rgba(230,58,46,.15)}
+  .navbtn:disabled{opacity:.18;cursor:default}
+  #prev{left:26px}#next{right:26px}
+  #dots{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:40;display:flex;gap:8px;max-width:80vw;flex-wrap:wrap;justify-content:center}
+  #dots .d{width:8px;height:8px;border-radius:50%;background:#3a3a3a;cursor:pointer;transition:all .25s}
+  #dots .d.on{background:var(--accent);width:22px;border-radius:4px}
+</style>
+</head>
+<body>
+<div id="viewport">
+  <div id="scaler">
+    <div id="track">
+
+      <!-- 1 封面（全幅背景圖 p1） -->
+      <section class="slide has-bg">
+        <div class="bgph" style="background-image:url('neixun_assets/bg_p1.png')"></div>
+        <div class="topbar"><span class="lvl">AI Workflow</span><span class="tag">#輪播工作流內訓</span></div>
+        <div class="fg">
+          <div class="kicker">AI WORKFLOW · TEAM TRAINING</div>
+          <h1 class="title serif">AI ×<br>輪播貼文工作流</h1>
+          <div class="sub">把 AI 放進團隊的內容生產流程</div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>01</b> / 15</span></div>
+      </section>
+
+      <!-- 2 為什麼研究 AI 工作流（ChatGPT logo p2） -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI Workflow</span><span class="tag">#輪播工作流內訓</span></div>
+        <div class="split">
+          <div class="ctext">
+            <div class="kicker">WHY</div>
+            <div class="quote serif">不是每個人都要變成 AI 專家<br>但團隊一定要<span class="hl">先熟悉它</span></div>
+            <div class="sub">2022 底 ChatGPT 出現後，我就開始要求團隊把 AI 放進日常工作<br>那時候不確定它會走多快，但很確定一件事：不先熟悉，未來一定落後</div>
+          </div>
+          <div class="cmedia logoc"><div class="gptlogo">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-label="ChatGPT"><path fill="#f5f5f5" d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg>
+            <div class="gptname">ChatGPT</div>
+          </div></div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>02</b> / 15</span></div>
+      </section>
+
+      <!-- 3 AI 三階段（圖 p3 右） -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI Workflow</span><span class="tag">#輪播工作流內訓</span></div>
+        <div class="split">
+          <div class="ctext">
+            <h2 class="serif">AI 正從「回答問題」<span class="hl">走向「執行任務」</span></h2>
+            <div class="rows">
+              <div class="row"><div class="idx">01</div><div class="body"><div class="rt">第一階段：幫人回答問題</div><div class="rd">你問它、它答你，幫你整理資料、產出初稿</div></div></div>
+              <div class="row"><div class="idx">02</div><div class="body"><div class="rt">第二階段：幫人完成任務</div><div class="rd">Agent 類工具出現，AI 開始能串接工具、執行整段流程</div></div></div>
+              <div class="row"><div class="idx">03</div><div class="body"><div class="rt">現在：放進團隊的工作流程</div><div class="rd">從單點工具，變成可複製的內容產出方式</div></div></div>
+            </div>
+          </div>
+          <div class="cmedia"><div class="ph fade-edge" style="background-image:url('neixun_assets/bg_p3.png');background-size:cover;background-position:center"></div></div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>03</b> / 15</span></div>
+      </section>
+
+      <!-- 4 今天只聚焦一件事（全幅背景圖 p4） -->
+      <section class="slide has-bg">
+        <div class="bgph" style="background-image:url('neixun_assets/bg_p4.png')"></div>
+        <div class="topbar"><span class="lvl">AI Workflow</span><span class="tag">#輪播工作流內訓</span></div>
+        <div class="fg">
+          <div class="kicker">TODAY</div>
+          <h2 class="serif">今天，只聚焦<span class="hl">一件事</span></h2>
+          <div class="lead">用 AI 跑完一篇<span class="hl">輪播貼文</span></div>
+          <div class="sub">更快 · 更標準 · 更容易複製</div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>04</b> / 15</span></div>
+      </section>
+
+      <!-- 5 本月成績（3 張實績 p5a/b/c） -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI Workflow</span><span class="tag">#輪播工作流內訓</span></div>
+        <div class="proof-montage">
+          <img class="pm pm1" src="neixun_assets/p5a.jpg" alt="">
+          <img class="pm pm2" src="neixun_assets/p5b.jpg" alt="">
+          <img class="pm pm3" src="neixun_assets/p5c.jpg" alt="">
+        </div>
+        <div class="fg5">
+          <div class="kicker">本月成績 · THIS MONTH</div>
+          <h1 class="title serif">這個月<br>做出的<span style="color:var(--accent)">成果</span></h1>
+          <div class="sub">用這套工具，一個月內實際產出的輪播內容與成效</div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>05</b> / 15</span></div>
+      </section>
+
+      <!-- 6 流程概覽（三張圖概括） -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI Workflow</span><span class="tag">#輪播工作流內訓</span></div>
+        <h2 class="serif">整套流程，<span class="hl">三張圖</span>先看完</h2>
+        <div class="over">
+          <div class="o"><div class="on">01 · 設定</div><div class="ph" style="background-image:url('neixun_assets/p6a.png')"></div><div class="ot">建立 IP × 選視覺</div><div class="od">告訴它你是誰、選一種視覺風格</div></div>
+          <div class="o"><div class="on">02 · 生成</div><div class="ph" style="background-image:url('neixun_assets/p6b.png')"></div><div class="ot">選格式 × 出內容</div><div class="od">判斷類型、套骨架，先出純文字稿</div></div>
+          <div class="o"><div class="on">03 · 輸出</div><div class="ph" style="background-image:url('neixun_assets/p6c.png')"></div><div class="ot">HTML × 下載 / 複製</div><div class="od">互動預覽、下載 PNG、複製 Caption</div></div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>06</b> / 15</span></div>
+      </section>
+
+      <!-- 7 操作①建立 IP 四題（無圖） -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI Workflow</span><span class="tag">#輪播工作流內訓</span></div>
+        <div class="step"><span class="num">STEP 1</span><span class="lbl">建立你的 IP</span></div>
+        <h2 class="serif">先回答 <span class="hl">4 題</span>，記住你的口吻</h2>
+        <div class="rows">
+          <div class="row"><div class="idx">Q1</div><div class="body"><div class="rt">你的帳號名稱是？你在幫誰解決什麼問題？</div></div></div>
+          <div class="row"><div class="idx">Q2</div><div class="body"><div class="rt">視覺偏 A 文字敘事型，還是 B 科技商業型？</div></div></div>
+          <div class="row"><div class="idx">Q3</div><div class="body"><div class="rt">主要 CTA 是讓人留言、收藏，還是換資源？</div></div></div>
+          <div class="row"><div class="idx">Q4</div><div class="body"><div class="rt">固定 Hashtag：每篇都會帶的 1–3 個分類標籤（可留空）</div></div></div>
+        </div>
+        <div class="sub">回答越詳細，文風越精準，之後都可隨時調整</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>07</b> / 15</span></div>
+      </section>
+
+      <!-- 8 操作②三個元素（無圖，標題已改） -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI Workflow</span><span class="tag">#輪播工作流內訓</span></div>
+        <div class="step"><span class="num">STEP 1</span><span class="lbl">固定顯示元素</span></div>
+        <h2 class="serif">三個元素，<span class="hl">設定一次永久使用</span></h2>
+        <div class="rows">
+          <div class="row"><div class="idx">①</div><div class="body"><div class="rt">帳號 ID</div><div class="rd">就是 Q1 的 @帳號，自動帶到每張頁尾，不另外問</div></div></div>
+          <div class="row"><div class="idx">②</div><div class="body"><div class="rt">固定 Hashtag</div><div class="rd">指定 1–3 個分類標籤 → 顯示為封面小標籤；完整 hashtag 串放 Caption</div></div></div>
+          <div class="row"><div class="idx">③</div><div class="body"><div class="rt">頁碼</div><div class="rd">每張固定顯示右下角 0N / 總數，標準元素不需設定</div></div></div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>08</b> / 15</span></div>
+      </section>
+
+      <!-- 9 操作③選視覺模板（A/B 解說縮小 + 真實卡片 p9） -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI Workflow</span><span class="tag">#輪播工作流內訓</span></div>
+        <div class="step"><span class="num">STEP 2</span><span class="lbl">選視覺模板</span></div>
+        <h2 class="serif">兩種模板，<span class="hl">選一個</span>就能開始</h2>
+        <div class="tpl-rows">
+          <div class="tpl-row">
+            <div class="tpl-desc">
+              <div class="tn">A 文字敘事型</div>
+              <div class="td">純黑底 + 品牌橘<br>文字為主、大量留白<br>適合：個人故事 · 思維洞見 · 觀點</div>
+            </div>
+            <div class="tpl-pic" style="background-image:url('neixun_assets/p9a.png')"></div>
+          </div>
+          <div class="tpl-row">
+            <div class="tpl-desc">
+              <div class="tn">B 科技商業型</div>
+              <div class="td">深藍黑 + 香檳金<br>圖表輔助、資料展示<br>適合：教學 · 商業知識 · 數據對比</div>
+            </div>
+            <div class="tpl-pic" style="background-image:url('neixun_assets/p9b.jpg')"></div>
+          </div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>09</b> / 15</span></div>
+      </section>
+
+      <!-- 10 操作④選格式 3 大類型（真實封面 p10 + 骨架） -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI Workflow</span><span class="tag">#輪播工作流內訓</span></div>
+        <div class="step"><span class="num">STEP 3</span><span class="lbl">選格式</span></div>
+        <h2 class="serif">收斂成 <span class="hl">3 大類型</span></h2>
+        <div class="fmt-text">
+          <div class="ftc">
+            <div class="ftt">STORY</div>
+            <div class="ftn">故事型</div>
+            <div class="ftu">個人經歷 · 關係情感 · 轉折</div>
+            <div class="ftl">
+              <div><b>封面</b>一句最痛的話，把人拉進情緒</div>
+              <div><b>起點</b>舊狀態或問題，讓人對號入座</div>
+              <div><b>轉折</b>故事的轉捩點，情緒翻面</div>
+              <div><b>洞見</b>從經歷提煉出的核心體會</div>
+              <div><b>CTA</b>情感收藏，或傳給想到的人</div>
+            </div>
+          </div>
+          <div class="ftc">
+            <div class="ftt">KNOWLEDGE</div>
+            <div class="ftn">知識型</div>
+            <div class="ftu">知識點 · 步驟 · 清單 · 數據</div>
+            <div class="ftl">
+              <div><b>封面</b>強鉤子標題，點出痛點或好處</div>
+              <div><b>痛點</b>先講受眾現在卡在哪</div>
+              <div><b>框架</b>一句話講清楚核心解法</div>
+              <div><b>步驟</b>每張一個步驟，照著做到位</div>
+              <div><b>CTA</b>關鍵字＋行動，留言換資源</div>
+            </div>
+          </div>
+          <div class="ftc">
+            <div class="ftt">OPINION</div>
+            <div class="ftn">觀點型</div>
+            <div class="ftu">強烈論點 · 反直覺 · 對比 · 時事</div>
+            <div class="ftl">
+              <div><b>封面</b>一句反直覺斷言，勾起好奇</div>
+              <div><b>換角度</b>把論點換個說法再講一次</div>
+              <div><b>論點</b>每張一個論點，可帶金句</div>
+              <div><b>收尾</b>總結立場，收束到 CTA</div>
+            </div>
+          </div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>10</b> / 15</span></div>
+      </section>
+
+      <!-- 11 操作⑤生成與輸出（無圖，加 4:5 說明） -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI Workflow</span><span class="tag">#輪播工作流內訓</span></div>
+        <div class="step"><span class="num">STEP 4</span><span class="lbl">生成與輸出</span></div>
+        <h2 class="serif">先文字、<span class="hl">後加圖</span></h2>
+        <div class="rows">
+          <div class="row"><div class="idx">01</div><div class="body"><div class="rt">先生成純文字版本，內容確認後再加圖</div><div class="rd">結構改起來比加圖後容易</div></div></div>
+          <div class="row"><div class="idx">02</div><div class="body"><div class="rt">輸出互動式 HTML 預覽</div><div class="rd">顯示元素沿用定位設定，不逐篇重問</div></div></div>
+          <div class="row"><div class="idx">03</div><div class="body"><div class="rt">圖片與文案都能帶走</div><div class="rd">逐張下載 PNG，Caption 旁有「複製整段」一鍵貼到 IG</div></div></div>
+        </div>
+        <div class="note">要加底圖時：先把<b>背景圖裁成 4:5 比例</b>再給 Claude，不然套進卡片會變形</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>11</b> / 15</span></div>
+      </section>
+
+      <!-- 12 操作⑥下載（簡化單點） -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI Workflow</span><span class="tag">#輪播工作流內訓</span></div>
+        <div class="step"><span class="num">STEP 5</span><span class="lbl">下載</span></div>
+        <div class="quote serif">下載 PNG，要在<span class="hl">本機開啟 HTML 檔</span>中才有效</div>
+        <div class="sub">在對話的預覽框裡點下載按鈕沒反應，是正常現象——把檔下載到本機，用 Chrome / Safari 開就會動</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>12</b> / 15</span></div>
+      </section>
+
+      <!-- 13 工具段收束（全幅背景圖 p13） -->
+      <section class="slide has-bg closing">
+        <div class="bgph" style="background-image:url('neixun_assets/bg_p13.png')"></div>
+        <div class="topbar"><span class="lvl">AI Workflow</span><span class="tag">#輪播工作流內訓</span></div>
+        <div class="fg">
+          <div class="kicker">TOOL · DONE</div>
+          <h1 class="serif" style="font-size:60px;line-height:1.18">照這套流程<br>輪播不用<span style="color:var(--accent)">從零動手</span></h1>
+          <div class="sub">貼上工具 · 回答幾題 · 一條龍生成</div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>13</b> / 15</span></div>
+      </section>
+
+      <!-- 14 輪播只是起點（延伸，圖 p14 右） -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI Workflow</span><span class="tag">#輪播工作流內訓</span></div>
+        <div class="split">
+          <div class="ctext">
+            <h2 class="serif">輪播只是<span class="hl">起點</span></h2>
+            <div class="rows">
+              <div class="row"><div class="idx">內容</div><div class="body"><div class="rt">往自媒體端</div><div class="rd">短影音腳本 · Threads · IG 貼文 · 內容月曆 · 私訊回覆 · 社群經營</div></div></div>
+              <div class="row"><div class="idx">企業</div><div class="body"><div class="rt">往公司內部端</div><div class="rd">資料整理 · SOP 產出 · 客服 · 業務流程 · 教育訓練 · 自動化 Agent · 系統導入</div></div></div>
+            </div>
+            <div class="sub">同一套「把 AI 放進流程」的思路，能延伸的不只內容</div>
+          </div>
+          <div class="cmedia"><div class="ph fade-edge" style="background-image:url('neixun_assets/bg_p14.png');background-size:cover;background-position:center"></div></div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>14</b> / 15</span></div>
+      </section>
+
+      <!-- 15 收尾金句 + 三項合作（全幅背景圖 p15） -->
+      <section class="slide has-bg closing even-dim">
+        <div class="bgph" style="background-image:url('neixun_assets/bg_p15.png')"></div>
+        <div class="topbar"><span class="lvl">AI Workflow</span><span class="tag">#輪播工作流內訓</span></div>
+        <div class="fg">
+          <div class="kicker">WHAT'S NEXT</div>
+          <h1 class="serif" style="font-size:58px;line-height:1.18">今天這堂課<span style="color:var(--accent)">只是開始</span></h1>
+          <div class="sub">真正的重點不是學會一個工具，而是開始想：公司裡有哪些工作，可以被 AI 重新整理成一套更有效率的流程</div>
+          <div class="three" style="margin-top:30px">
+            <div class="card"><div class="tag">01</div><div class="ct">AI 課程</div><div class="meta">基礎 ＋ 自媒體應用</div></div>
+            <div class="card"><div class="tag">02</div><div class="ct">內容工作流導入</div><div class="meta">把這套流程接進你的團隊</div></div>
+            <div class="card"><div class="tag">03</div><div class="ct">企業內訓 × Agent</div><div class="meta">客製內訓與自動化導入</div></div>
+          </div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>15</b> / 15</span></div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<button id="prev" class="navbtn" aria-label="上一頁">‹</button>
+<button id="next" class="navbtn" aria-label="下一頁">›</button>
+<div id="dots"></div>
+
+<script>
+  const scaler=document.getElementById('scaler');
+  const track=document.getElementById('track');
+  const slides=[...document.querySelectorAll('.slide')];
+  const total=slides.length;
+  const prev=document.getElementById('prev');
+  const next=document.getElementById('next');
+  const dotsWrap=document.getElementById('dots');
+  const W=1280,H=720;
+  let cur=0;
+
+  slides.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='d'+(i===0?' on':'');
+    d.addEventListener('click',()=>goTo(i));
+    dotsWrap.appendChild(d);
+  });
+  const dots=[...dotsWrap.children];
+
+  function fit(){
+    const s=Math.min(window.innerWidth/W, window.innerHeight/H);
+    scaler.style.transform=`scale(${s})`;
+  }
+  window.addEventListener('resize',fit); fit();
+
+  function goTo(n){
+    cur=Math.max(0,Math.min(total-1,n));
+    track.style.transform=`translateX(${-cur*W}px)`;
+    dots.forEach((d,i)=>d.classList.toggle('on',i===cur));
+    prev.disabled=cur===0;
+    next.disabled=cur===total-1;
+  }
+  prev.addEventListener('click',()=>goTo(cur-1));
+  next.addEventListener('click',()=>goTo(cur+1));
+  window.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown'){goTo(cur+1)}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){goTo(cur-1)}
+    else if(e.key==='Home'){goTo(0)}
+    else if(e.key==='End'){goTo(total-1)}
+  });
+  let sx=null;
+  window.addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
+  window.addEventListener('touchend',e=>{
+    if(sx===null)return;
+    const dx=e.changedTouches[0].clientX-sx;
+    if(Math.abs(dx)>50){dx<0?goTo(cur+1):goTo(cur-1)}
+    sx=null;
+  },{passive:true});
+  goTo(0);
+</script>
+</body>
+</html>
