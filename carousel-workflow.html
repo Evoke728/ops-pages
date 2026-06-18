@@ -70,6 +70,11 @@
   .split .cmedia .ph{width:100%;aspect-ratio:16/9}
   .split .cmedia.logoc{flex:0 0 340px;justify-content:center}
   .split .cmedia.logoc .ph{width:260px;height:260px}
+  .exwrap{flex:0 0 500px;display:flex;flex-direction:column;gap:14px;align-items:center}
+  .ex-cap{color:var(--accent);font-size:14px;font-weight:700;letter-spacing:.04em}
+  .ex-pair{display:flex;gap:18px}
+  .ex{display:block;width:232px;height:290px;border-radius:10px;background-size:cover;background-position:top center;border:1px solid rgba(255,255,255,.12);box-shadow:0 14px 34px rgba(0,0,0,.5);transition:transform .2s,border-color .2s}
+  .ex:hover{transform:translateY(-5px);border-color:var(--accent)}
   .fade-edge{border:none!important;border-radius:0;box-shadow:inset 0 0 80px 36px var(--bg)}
   .gptlogo{display:flex;flex-direction:column;align-items:center;gap:22px}
   .gptlogo svg{width:150px;height:150px}
@@ -209,9 +214,9 @@
           <img class="pm pm3" src="neixun_assets/p5c.jpg" alt="">
         </div>
         <div class="fg5">
-          <div class="kicker">本月成績 · THIS MONTH</div>
-          <h1 class="title serif">這個月<br>做出的<span style="color:var(--accent)">成果</span></h1>
-          <div class="sub">用這套工具，一個月內實際產出的輪播內容與成效</div>
+          <div class="kicker">IG CAROUSEL · TOOL GUIDE</div>
+          <h1 class="title serif">輪播貼文<br>生成工具</h1>
+          <div class="sub">從定位到成品，一條龍完成</div>
         </div>
         <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>05</b> / 15</span></div>
       </section>
@@ -328,14 +333,25 @@
       <!-- 11 操作⑤生成與輸出（無圖，加 4:5 說明） -->
       <section class="slide">
         <div class="topbar"><span class="lvl">AI Workflow</span><span class="tag">#輪播工作流內訓</span></div>
-        <div class="step"><span class="num">STEP 4</span><span class="lbl">生成與輸出</span></div>
-        <h2 class="serif">先文字、<span class="hl">後加圖</span></h2>
-        <div class="rows">
-          <div class="row"><div class="idx">01</div><div class="body"><div class="rt">先生成純文字版本，內容確認後再加圖</div><div class="rd">結構改起來比加圖後容易</div></div></div>
-          <div class="row"><div class="idx">02</div><div class="body"><div class="rt">輸出互動式 HTML 預覽</div><div class="rd">顯示元素沿用定位設定，不逐篇重問</div></div></div>
-          <div class="row"><div class="idx">03</div><div class="body"><div class="rt">圖片與文案都能帶走</div><div class="rd">逐張下載 PNG，Caption 旁有「複製整段」一鍵貼到 IG</div></div></div>
+        <div class="split">
+          <div class="ctext">
+            <div class="step"><span class="num">STEP 4</span><span class="lbl">生成與輸出</span></div>
+            <h2 class="serif">先文字、<span class="hl">後加圖</span></h2>
+            <div class="rows">
+              <div class="row"><div class="idx">01</div><div class="body"><div class="rt">先生成純文字版本，內容確認後再加圖</div><div class="rd">結構改起來比加圖後容易</div></div></div>
+              <div class="row"><div class="idx">02</div><div class="body"><div class="rt">輸出互動式 HTML 預覽</div><div class="rd">顯示元素沿用定位設定，不逐篇重問</div></div></div>
+              <div class="row"><div class="idx">03</div><div class="body"><div class="rt">圖片與文案都能帶走</div><div class="rd">逐張下載 PNG，Caption 旁有「複製整段」一鍵貼到 IG</div></div></div>
+            </div>
+            <div class="note">要加底圖時：先把<b>背景圖裁成 4:5 比例</b>再給 Claude，不然套進卡片會變形</div>
+          </div>
+          <div class="exwrap">
+            <div class="ex-cap">真實作品 · 點圖看貼文 ↗</div>
+            <div class="ex-pair">
+              <a class="ex" href="https://www.instagram.com/p/DYPA2f1j0L6/?img_index=1" target="_blank" rel="noopener" style="background-image:url('neixun_assets/p11a.png')"></a>
+              <a class="ex" href="https://www.instagram.com/p/DY1qo-YiZuX/?img_index=1" target="_blank" rel="noopener" style="background-image:url('neixun_assets/p11b.png')"></a>
+            </div>
+          </div>
         </div>
-        <div class="note">要加底圖時：先把<b>背景圖裁成 4:5 比例</b>再給 Claude，不然套進卡片會變形</div>
         <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>11</b> / 15</span></div>
       </section>
 
@@ -384,7 +400,7 @@
         <div class="fg">
           <div class="kicker">WHAT'S NEXT</div>
           <h1 class="serif" style="font-size:58px;line-height:1.18">今天這堂課<span style="color:var(--accent)">只是開始</span></h1>
-          <div class="sub">真正的重點不是學會一個工具，而是開始想：公司裡有哪些工作，可以被 AI 重新整理成一套更有效率的流程</div>
+          <div class="sub">真正的重點不是學會一個工具，而是開始想：我有哪些工作，可以被 AI 重新整理成一套更有效率的流程</div>
           <div class="three" style="margin-top:30px">
             <div class="card"><div class="tag">01</div><div class="ct">AI 課程</div><div class="meta">基礎 ＋ 自媒體應用</div></div>
             <div class="card"><div class="tag">02</div><div class="ct">內容工作流導入</div><div class="meta">把這套流程接進你的團隊</div></div>
