@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI × 自媒體工作流｜課程簡報</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d0d0d; --bg2:#141414; --line:#262626;
+    --text:#f5f5f5; --muted:#c8c2b6; --muted2:#555555;
+    --accent:#e63a2e; --orange:#f07f1a; --champagne:#d8c9a3; --navy:#14213a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;background:#000;color:var(--text);font-family:'Noto Sans TC',sans-serif;overflow:hidden}
+  .serif{font-family:'Noto Serif TC',serif}
+
+  #viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  #scaler{width:1280px;height:720px;position:relative;overflow:hidden;transform-origin:center center;background:var(--bg)}
+  #track{display:flex;height:100%;transition:transform .5s cubic-bezier(.7,0,.2,1)}
+  .slide{flex:0 0 1280px;width:1280px;height:720px;position:relative;display:flex;flex-direction:column;justify-content:center;padding:72px 96px}
+
+  .topbar{position:absolute;top:42px;left:96px;right:96px;display:flex;justify-content:space-between;align-items:center;font-size:13px;letter-spacing:.18em;text-transform:uppercase;z-index:3}
+  .topbar .lvl{color:var(--accent);font-weight:700;font-family:'Inter',sans-serif}
+  .topbar .tag{color:var(--muted)}
+  .footer{position:absolute;bottom:40px;left:96px;right:96px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted);letter-spacing:.08em;z-index:3}
+  .footer .pg{font-family:'Inter',sans-serif}
+  .footer .pg b{color:var(--text)}
+
+  .kicker{color:var(--accent);font-weight:700;letter-spacing:.16em;font-size:13px;text-transform:uppercase;font-family:'Inter',sans-serif;margin-bottom:20px}
+  h1.title{font-size:74px;font-weight:900;line-height:1.1;letter-spacing:.01em}
+  h2{font-size:42px;font-weight:900;line-height:1.16;margin-bottom:30px}
+  h2 .hl{color:var(--accent)}
+  .sub{color:var(--muted);font-size:18px;font-weight:400;margin-top:20px;letter-spacing:.04em;line-height:1.6;max-width:1010px}
+  .lead{font-size:30px;font-weight:700;line-height:1.4;margin-top:6px}
+  .lead .hl{color:var(--accent)}
+
+  .rows{display:flex;flex-direction:column;gap:18px;max-width:1010px}
+  .row{display:flex;gap:22px;align-items:flex-start}
+  .row .idx{font-family:'Inter',sans-serif;font-weight:700;font-size:22px;color:var(--accent);line-height:1.15;min-width:54px;border-right:2px solid var(--line);padding-right:15px}
+  .row .body .rt{font-size:21px;font-weight:500;line-height:1.4;color:var(--text)}
+  .row .body .rd{color:var(--muted);font-size:15px;font-weight:300;margin-top:5px;line-height:1.5}
+
+  .flow{display:flex;flex-wrap:wrap;gap:12px;max-width:1100px;align-items:center}
+  .flow .f{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:16px 18px;font-size:17px;font-weight:500}
+  .flow .ar{color:var(--muted2);font-family:'Inter',sans-serif;font-size:18px}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:1090px}
+  .card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:28px 28px;display:flex;flex-direction:column;gap:12px}
+  .card .ct{font-size:22px;font-weight:700}
+  .card .meta{color:var(--muted);font-size:15px;font-weight:300;line-height:1.6}
+
+  .three{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:1110px}
+  .three .card{padding:24px 22px;gap:10px}
+  .three .card .tag{color:var(--accent);font-family:'Inter',sans-serif;font-weight:700;font-size:12px;letter-spacing:.12em}
+  .three .card .ct{font-size:23px}
+  .three .card .meta{font-size:14px}
+
+  .quote{font-family:'Noto Serif TC',serif;font-weight:700;font-size:46px;line-height:1.32;max-width:1080px}
+  .quote .hl{color:var(--accent)}
+
+  /* agenda */
+  .agenda{display:flex;flex-direction:column;max-width:1100px}
+  .agenda .ag{display:flex;gap:24px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--line)}
+  .agenda .at{font-family:'Inter',sans-serif;color:var(--muted);font-size:15px;min-width:130px;letter-spacing:.04em}
+  .agenda .an{flex:1;font-size:18px;font-weight:500;color:var(--text)}
+  .agenda .ap{color:var(--accent);font-size:14px;min-width:140px;text-align:right}
+  .agenda .lunch .an,.agenda .lunch .at{color:var(--muted2)}
+
+  /* chapter divider */
+  .divider{justify-content:center}
+  .divider .cbig{position:absolute;right:90px;top:90px;font-family:'Inter',sans-serif;font-weight:700;font-size:300px;line-height:.8;color:rgba(230,58,46,.08);z-index:0}
+  .divider .cno{position:relative;z-index:1;color:var(--accent);font-family:'Inter',sans-serif;font-weight:700;letter-spacing:.22em;font-size:15px;margin-bottom:18px}
+  .divider .ctitle{position:relative;z-index:1;font-family:'Noto Serif TC',serif;font-weight:900;font-size:62px;line-height:1.14}
+  .divider .cmeta{position:relative;z-index:1;color:var(--muted);font-size:17px;margin-top:24px}
+  .divider .cmeta b{color:var(--accent);font-weight:700}
+
+  /* demo / hands-on */
+  .demo .dlabel{display:inline-flex;align-items:center;gap:12px;margin-bottom:24px}
+  .demo .dlabel .dt{font-family:'Inter',sans-serif;font-weight:700;font-size:14px;letter-spacing:.14em;color:var(--bg);background:var(--accent);padding:6px 14px;border-radius:5px}
+  .demo .dlabel .dl{color:var(--muted);letter-spacing:.16em;font-size:13px;text-transform:uppercase;font-family:'Inter',sans-serif}
+
+  .navbtn{position:fixed;top:50%;transform:translateY(-50%);z-index:40;width:48px;height:48px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(230,58,46,.5);color:var(--accent);font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;user-select:none}
+  .navbtn:hover{background:rgba(230,58,46,.15)}
+  .navbtn:disabled{opacity:.18;cursor:default}
+  #prev{left:26px}#next{right:26px}
+  #dots{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:40;display:flex;gap:6px;max-width:82vw;flex-wrap:wrap;justify-content:center}
+  #dots .d{width:7px;height:7px;border-radius:50%;background:#3a3a3a;cursor:pointer;transition:all .25s}
+  #dots .d.on{background:var(--accent);width:20px;border-radius:4px}
+</style>
+</head>
+<body>
+<div id="viewport">
+  <div id="scaler">
+    <div id="track">
+
+      <!-- 1 封面 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <div class="kicker">AI × CONTENT · ONE-DAY COURSE</div>
+        <h1 class="title serif">AI ×<br>自媒體工作流</h1>
+        <div class="sub">把 AI 接進你的內容生產流程——從選題到成品，一條龍</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>01</b> / 37</span></div>
+      </section>
+
+      <!-- 2 議程 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <h2 class="serif">今天這 <span class="hl">6 小時</span></h2>
+        <div class="agenda">
+          <div class="ag"><span class="at">10:00–10:40</span><span class="an">一、為什麼現在做內容要學 AI</span><span class="ap">Jason／紀哥</span></div>
+          <div class="ag"><span class="at">10:40–11:25</span><span class="an">二之 1、我們原本的做法 × AI 怎麼優化</span><span class="ap">大頭</span></div>
+          <div class="ag"><span class="at">11:25–12:20</span><span class="an">二之 2、實際展示：怎麼介接我們的系統</span><span class="ap">YC</span></div>
+          <div class="ag lunch"><span class="at">12:20–13:20</span><span class="an">午休</span><span class="ap">—</span></div>
+          <div class="ag"><span class="at">13:20–14:40</span><span class="an">三、AI 輪播工作流（實戰主軸）</span><span class="ap">Max</span></div>
+          <div class="ag"><span class="at">14:40–15:10</span><span class="an">四、其他形式快速帶過</span><span class="ap">YC／Max／大頭</span></div>
+          <div class="ag"><span class="at">15:10–15:40</span><span class="an">五、內容如何開始變現</span><span class="ap">Jason／紀哥</span></div>
+          <div class="ag"><span class="at">15:40–16:00</span><span class="an">Q&A ＋ 收尾</span><span class="ap">Jason／紀哥</span></div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>02</b> / 37</span></div>
+      </section>
+
+      <!-- 3 帶走什麼 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <h2 class="serif">今天你會<span class="hl">帶走什麼</span></h2>
+        <div class="rows">
+          <div class="row"><div class="idx">01</div><div class="body"><div class="rt">看懂一條龍的內容生產系統長什麼樣</div></div></div>
+          <div class="row"><div class="idx">02</div><div class="body"><div class="rt">親手用 AI 跑出一篇輪播貼文</div></div></div>
+          <div class="row"><div class="idx">03</div><div class="body"><div class="rt">知道流量怎麼接到變現</div></div></div>
+        </div>
+        <div class="sub">這是一堂通識課——目標是看懂架構、看到可能性；專業建置走後端</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>03</b> / 37</span></div>
+      </section>
+
+      <!-- 4 Ch1 divider -->
+      <section class="slide divider">
+        <div class="cbig">01</div>
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <div class="cno">CHAPTER 01</div>
+        <div class="ctitle">為什麼現在<br>做內容要學 AI</div>
+        <div class="cmeta">主講：<b>Jason／紀哥</b></div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>04</b> / 37</span></div>
+      </section>
+
+      <!-- 5 為什麼現在要學 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <div class="kicker">WHY</div>
+        <div class="quote serif">不是每個人都要變成 AI 專家<br>但做內容的人，一定要<span class="hl">先把它變日常</span></div>
+        <div class="sub">2022 底 ChatGPT 出現後，AI 從少數人的工具，慢慢變成每個內容工作者的日常</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>05</b> / 37</span></div>
+      </section>
+
+      <!-- 6 AI 三階段 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <h2 class="serif">AI 正從「回答問題」<span class="hl">走向「執行任務」</span></h2>
+        <div class="rows">
+          <div class="row"><div class="idx">01</div><div class="body"><div class="rt">第一階段：幫人回答問題</div><div class="rd">你問它、它答你，幫你整理資料、產出初稿</div></div></div>
+          <div class="row"><div class="idx">02</div><div class="body"><div class="rt">第二階段：幫人完成任務</div><div class="rd">Agent 類工具出現，AI 開始能串接工具、執行整段流程</div></div></div>
+          <div class="row"><div class="idx">03</div><div class="body"><div class="rt">現在：放進你的內容工作流程</div><div class="rd">從單點工具，變成一套可複製的內容產出方式</div></div></div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>06</b> / 37</span></div>
+      </section>
+
+      <!-- 7 趨勢 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <h2 class="serif">現在的<span class="hl">趨勢</span></h2>
+        <div class="rows">
+          <div class="row"><div class="idx">◆</div><div class="body"><div class="rt">演算法越來越吃「停留」與「互動」</div><div class="rd">不是發得多就好，是能不能讓人停下來、有反應</div></div></div>
+          <div class="row"><div class="idx">◆</div><div class="body"><div class="rt">輪播 vs 影片，目前大約 50:50</div><div class="rd">圖文輪播仍是高效、低成本的主力，沒有被影片取代</div></div></div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>07</b> / 37</span></div>
+      </section>
+
+      <!-- 8 定調 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <div class="kicker">SO</div>
+        <h1 class="title serif">把 AI 接進<br>你的<span style="color:var(--accent)">內容流程</span></h1>
+        <div class="sub">今天就從最具體的場景開始：一篇輪播貼文，怎麼用一套流程跑出來</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>08</b> / 37</span></div>
+      </section>
+
+      <!-- 9 Ch2 P1 divider -->
+      <section class="slide divider">
+        <div class="cbig">02</div>
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <div class="cno">CHAPTER 02 · PART 1</div>
+        <div class="ctitle">我們原本的做法<br>× AI 怎麼優化</div>
+        <div class="cmeta">主講：<b>大頭</b></div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>09</b> / 37</span></div>
+      </section>
+
+      <!-- 10 原本流程 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <h2 class="serif">沒有 AI 時，<span class="hl">我們怎麼做</span></h2>
+        <div class="flow">
+          <div class="f">靈感</div><span class="ar">→</span>
+          <div class="f">篩題</div><span class="ar">→</span>
+          <div class="f">寫稿</div><span class="ar">→</span>
+          <div class="f">各平台產出</div><span class="ar">→</span>
+          <div class="f">發布</div>
+        </div>
+        <div class="sub">一條人工流水線——每一步都靠人腦與人手，環環相扣</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>10</b> / 37</span></div>
+      </section>
+
+      <!-- 11 痛點 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <h2 class="serif">每一步，<span class="hl">最花時間的是</span></h2>
+        <div class="rows">
+          <div class="row"><div class="idx">靈感</div><div class="body"><div class="rt">想不到題目、或想到一堆不知道哪個會紅</div></div></div>
+          <div class="row"><div class="idx">寫稿</div><div class="body"><div class="rt">從零開始打字，每篇都重來</div></div></div>
+          <div class="row"><div class="idx">多平台</div><div class="body"><div class="rt">同一個主題要改成輪播／脆文／限動，重工最兇</div></div></div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>11</b> / 37</span></div>
+      </section>
+
+      <!-- 12 AI 切進來 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <h2 class="serif">AI 切進來的<span class="hl">位置</span></h2>
+        <div class="rows">
+          <div class="row"><div class="idx">交給 AI</div><div class="body"><div class="rt">整理、初稿、分類、多平台改寫</div><div class="rd">又花時間、又不需要你獨特判斷的環節</div></div></div>
+          <div class="row"><div class="idx">留給人</div><div class="body"><div class="rt">選題判斷、手感優化、最後拍板</div><div class="rd">需要品味與經驗的環節</div></div></div>
+        </div>
+        <div class="sub"><b style="color:var(--text)">AI 不是取代流程，是把流程裡可重複的部分接走</b></div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>12</b> / 37</span></div>
+      </section>
+
+      <!-- 13 Ch2 P2 divider -->
+      <section class="slide divider">
+        <div class="cbig">02</div>
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <div class="cno">CHAPTER 02 · PART 2</div>
+        <div class="ctitle">實際展示：怎麼<br>介接我們的系統</div>
+        <div class="cmeta">主講：<b>YC</b>（展示 ＋ 講解）</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>13</b> / 37</span></div>
+      </section>
+
+      <!-- 14 pipeline -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <h2 class="serif">我們現在實際<span class="hl">怎麼跑</span></h2>
+        <div class="flow">
+          <div class="f">靈感</div><span class="ar">→</span>
+          <div class="f">篩題</div><span class="ar">→</span>
+          <div class="f">Claude 整理</div><span class="ar">→</span>
+          <div class="f">輪播 / 脆文 / 限動</div><span class="ar">→</span>
+          <div class="f">發布</div>
+        </div>
+        <div class="sub">同一條流水線，差別是 AI 接走了中間最重的幾段</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>14</b> / 37</span></div>
+      </section>
+
+      <!-- 15 core context -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <h2 class="serif">關鍵：先建一次 <span class="hl">context</span>，之後每次掛上</h2>
+        <div class="rows">
+          <div class="row"><div class="idx">①</div><div class="body"><div class="rt">Profile（你是誰、幫誰、語氣）</div></div></div>
+          <div class="row"><div class="idx">②</div><div class="body"><div class="rt">對標（你參考誰、什麼會紅）</div></div></div>
+          <div class="row"><div class="idx">③</div><div class="body"><div class="rt">這次任務的背景</div></div></div>
+        </div>
+        <div class="sub">不給 context，AI 每次都從零；給了，它才能直接判斷你這次要做什麼</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>15</b> / 37</span></div>
+      </section>
+
+      <!-- 16 為什麼叫 context -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <div class="kicker">WHY "CONTEXT"</div>
+        <h2 class="serif">為什麼叫 <span class="hl">context</span></h2>
+        <div class="rows">
+          <div class="row"><div class="idx">原意</div><div class="body"><div class="rt">AI 每次回答，只看得到「這次塞進視窗的文字」</div><div class="rd">這個視窗，技術上叫 context window（上下文視窗）——視窗外的它一概不知道</div></div></div>
+          <div class="row"><div class="idx">所以</div><div class="body"><div class="rt">「建 context」＝主動決定要把哪些背景餵進去</div><div class="rd">Profile／對標／背景，都是你刻意準備、要塞進視窗的那一包</div></div></div>
+        </div>
+        <div class="sub"><b style="color:var(--text)">AI 不是記得你是誰，它只看你這次給它看的東西——準備得好，它一次就上手</b></div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>16</b> / 37</span></div>
+      </section>
+
+      <!-- 17 demo -->
+      <section class="slide demo">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <div class="dlabel"><span class="dt">LIVE DEMO</span><span class="dl">現場展示</span></div>
+        <h2 class="serif">丟一個連結進系統<br>看它<span class="hl">自動分類成選題</span></h2>
+        <div class="sub">把一篇靈感／連結丟進去 → 系統依人設判斷 → 輸出選題建議 ＋ 各平台內容架構（輪播／脆文／限動）</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>17</b> / 37</span></div>
+      </section>
+
+      <!-- 17 收束/護欄 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <h2 class="serif">你看到的是<span class="hl">成果與運作</span></h2>
+        <div class="sub">這套系統怎麼建到專業水準（Profile 怎麼養、對標怎麼做）是另外的建置服務——今天先讓你看到它跑起來長什麼樣</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>18</b> / 37</span></div>
+      </section>
+
+      <!-- 18 Ch3 divider -->
+      <section class="slide divider">
+        <div class="cbig">03</div>
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <div class="cno">CHAPTER 03 · 實戰主軸</div>
+        <div class="ctitle">AI 輪播工作流</div>
+        <div class="cmeta">主講：<b>Max</b>（其他人助教）</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>19</b> / 37</span></div>
+      </section>
+
+      <!-- 19 為什麼輪播 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <h2 class="serif">為什麼輪播是<span class="hl">目前最強武器</span></h2>
+        <div class="rows">
+          <div class="row"><div class="idx">◆</div><div class="body"><div class="rt">製作成本低、產出快</div></div></div>
+          <div class="row"><div class="idx">◆</div><div class="body"><div class="rt">資訊密度高，收藏與分享率好</div></div></div>
+          <div class="row"><div class="idx">◆</div><div class="body"><div class="rt">最容易用 AI 標準化、可複製</div></div></div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>20</b> / 37</span></div>
+      </section>
+
+      <!-- 20 流程總覽 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <h2 class="serif">輪播工作流，<span class="hl">五步</span></h2>
+        <div class="flow">
+          <div class="f">熱門分析</div><span class="ar">→</span>
+          <div class="f">結構拆解</div><span class="ar">→</span>
+          <div class="f">AI 生成</div><span class="ar">→</span>
+          <div class="f">人工優化</div><span class="ar">→</span>
+          <div class="f">發布</div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>21</b> / 37</span></div>
+      </section>
+
+      <!-- 21 熱門分析 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <div class="kicker">STEP 1</div>
+        <h2 class="serif">熱門分析：怎麼看一篇<span class="hl">為什麼會紅</span></h2>
+        <div class="sub">不是抄，是看懂它的選題角度、第一頁鉤子、結構節奏——把「為什麼紅」拆成可重複的判準</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>22</b> / 37</span></div>
+      </section>
+
+      <!-- 22 結構拆解 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <div class="kicker">STEP 2</div>
+        <h2 class="serif">結構拆解：<span class="hl">3 大類型</span></h2>
+        <div class="three">
+          <div class="card"><div class="tag">STORY</div><div class="ct">故事型</div><div class="meta">封面 → 起點 → 轉折 → 洞見 → CTA</div></div>
+          <div class="card"><div class="tag">KNOWLEDGE</div><div class="ct">知識型</div><div class="meta">封面 → 痛點 → 解法 → 步驟 → CTA</div></div>
+          <div class="card"><div class="tag">OPINION</div><div class="ct">觀點型</div><div class="meta">封面 → 換角度 → 論點 → 收尾</div></div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>23</b> / 37</span></div>
+      </section>
+
+      <!-- 23 AI 生成 demo -->
+      <section class="slide demo">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <div class="dlabel"><span class="dt">LIVE DEMO</span><span class="dl">STEP 3 · AI 生成</span></div>
+        <h2 class="serif">定位 → 純文字稿 → <span class="hl">互動 HTML</span></h2>
+        <div class="sub">先出純文字版確認結構，再生成互動式 HTML 預覽——現場跑一篇給大家看</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>24</b> / 37</span></div>
+      </section>
+
+      <!-- 24 人工優化 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <div class="kicker">STEP 4</div>
+        <h2 class="serif">人工優化：<span class="hl">AI 出八成，你補最後兩成</span></h2>
+        <div class="rows">
+          <div class="row"><div class="idx">封面</div><div class="body"><div class="rt">鉤子那句——一個陌生人會不會想看下一張</div></div></div>
+          <div class="row"><div class="idx">背景圖</div><div class="body"><div class="rt">轉 base64 內嵌＋遮罩，封面漸層、內頁純色</div></div></div>
+          <div class="row"><div class="idx">Caption</div><div class="body"><div class="rt">短斷句格式＋單一主題 hashtag</div></div></div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>25</b> / 37</span></div>
+      </section>
+
+      <!-- 25 發布 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <div class="kicker">STEP 5</div>
+        <h2 class="serif">發布：<span class="hl">圖與文案都能帶走</span></h2>
+        <div class="sub">下載乾淨的 4:5 PNG（在本機瀏覽器開才有效）＋ 一鍵複製 Caption → 貼上 IG</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>26</b> / 37</span></div>
+      </section>
+
+      <!-- 26 現場實作 -->
+      <section class="slide demo">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <div class="dlabel"><span class="dt">HANDS-ON</span><span class="dl">現場實作</span></div>
+        <h2 class="serif">換你，用課前素材<br><span class="hl">跑出一篇輪播</span></h2>
+        <div class="sub">拿出你課前帶來的素材，照五步跑一遍——助教現場協助，跑不順的地方當場問</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>27</b> / 37</span></div>
+      </section>
+
+      <!-- 27 Ch4 divider -->
+      <section class="slide divider">
+        <div class="cbig">04</div>
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <div class="cno">CHAPTER 04</div>
+        <div class="ctitle">其他形式<br>快速帶過</div>
+        <div class="cmeta">主講：<b>YC／Max／大頭</b>　·　一套 context＋選題，分流成各形式</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>28</b> / 37</span></div>
+      </section>
+
+      <!-- 28 threads + 限動 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <h2 class="serif">同一個選題，<span class="hl">換個形式</span></h2>
+        <div class="cols">
+          <div class="card"><div class="ct">Threads 文</div><div class="meta">短文／串文，第一句就是鉤子<br>節奏快、口語、留白</div></div>
+          <div class="card"><div class="ct">限動</div><div class="meta">兩種目的，結構不同：<br>養鐵粉 vs 導購轉換</div></div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>29</b> / 37</span></div>
+      </section>
+
+      <!-- 29 短影音 + FB -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <h2 class="serif">還有<span class="hl">這些</span></h2>
+        <div class="cols">
+          <div class="card"><div class="ct">短影音腳本</div><div class="meta">開頭鉤子（前 3 秒）＋ 腳本初稿<br>AI 出稿、人腦調節奏</div></div>
+          <div class="card"><div class="ct">FB 長文</div><div class="meta">長文結構：鋪陳 → 轉折 → 收束<br>同一份 context 直接生</div></div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>30</b> / 37</span></div>
+      </section>
+
+      <!-- 30 收束 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <div class="kicker">SO</div>
+        <h1 class="title serif">一套 context，<br><span style="color:var(--accent)">打天下</span></h1>
+        <div class="sub">各形式的細節都收在後端進階內容——今天先讓你看到「同一套東西，分流成所有形式」</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>31</b> / 37</span></div>
+      </section>
+
+      <!-- 31 Ch5 divider -->
+      <section class="slide divider">
+        <div class="cbig">05</div>
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <div class="cno">CHAPTER 05</div>
+        <div class="ctitle">內容如何<br>開始變現</div>
+        <div class="cmeta">主講：<b>Jason／紀哥</b>　·　不講太深，但要講</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>32</b> / 37</span></div>
+      </section>
+
+      <!-- 32 漏斗 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <h2 class="serif">流量 → 信任 → <span class="hl">成交</span></h2>
+        <div class="three">
+          <div class="card"><div class="tag">TRAFFIC</div><div class="ct">吸粉內容</div><div class="meta">負責被看見、把人帶進來</div></div>
+          <div class="card"><div class="tag">TRUST</div><div class="ct">信任內容</div><div class="meta">當橋——把流量養成信任</div></div>
+          <div class="card"><div class="tag">SALES</div><div class="ct">成交內容</div><div class="meta">負責賺錢、收單</div></div>
+        </div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>33</b> / 37</span></div>
+      </section>
+
+      <!-- 33 為什麼接不到 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <h2 class="serif">為什麼<span class="hl">只做會紅的</span>，接不到變現</h2>
+        <div class="sub">會紅的內容負責流量，但流量不會自己變成收入——中間少了信任內容當橋，就會斷層。三種內容要一起排，不是只做會紅的</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>34</b> / 37</span></div>
+      </section>
+
+      <!-- 34 點到為止 -->
+      <section class="slide">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <h2 class="serif">變現這條，<span class="hl">今天先點到</span></h2>
+        <div class="sub">完整的漏斗設計、內容戰略角色、導流機制——是後端進階內容；今天先讓你知道「流量怎麼接到變現」這件事存在、而且有方法</div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>35</b> / 37</span></div>
+      </section>
+
+      <!-- 35 Q&A -->
+      <section class="slide divider">
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <div class="cno">Q & A</div>
+        <div class="ctitle">有什麼問題<br>現在問</div>
+        <div class="cmeta">主講：<b>Jason／紀哥</b></div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>36</b> / 37</span></div>
+      </section>
+
+      <!-- 36 收尾 -->
+      <section class="slide divider">
+        <div class="cbig">∞</div>
+        <div class="topbar"><span class="lvl">AI × 自媒體工作流</span><span class="tag">#通識課</span></div>
+        <div class="cno">WHAT'S NEXT</div>
+        <div class="ctitle">今天是開始<br>不是結束</div>
+        <div class="cmeta">想做到專業水準 → <b>工具包 · 進階班 · 陪跑</b></div>
+        <div class="footer"><span>奇點學院 x D11</span><span class="pg"><b>37</b> / 37</span></div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<button id="prev" class="navbtn" aria-label="上一頁">‹</button>
+<button id="next" class="navbtn" aria-label="下一頁">›</button>
+<div id="dots"></div>
+
+<script>
+  const scaler=document.getElementById('scaler');
+  const track=document.getElementById('track');
+  const slides=[...document.querySelectorAll('.slide')];
+  const total=slides.length;
+  const prev=document.getElementById('prev');
+  const next=document.getElementById('next');
+  const dotsWrap=document.getElementById('dots');
+  const W=1280,H=720;
+  let cur=0;
+  slides.forEach((_,i)=>{const d=document.createElement('div');d.className='d'+(i===0?' on':'');d.addEventListener('click',()=>goTo(i));dotsWrap.appendChild(d);});
+  const dots=[...dotsWrap.children];
+  function fit(){const s=Math.min(window.innerWidth/W,window.innerHeight/H);scaler.style.transform=`scale(${s})`;}
+  window.addEventListener('resize',fit);fit();
+  function goTo(n){cur=Math.max(0,Math.min(total-1,n));track.style.transform=`translateX(${-cur*W}px)`;dots.forEach((d,i)=>d.classList.toggle('on',i===cur));prev.disabled=cur===0;next.disabled=cur===total-1;}
+  prev.addEventListener('click',()=>goTo(cur-1));
+  next.addEventListener('click',()=>goTo(cur+1));
+  window.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='PageDown')goTo(cur+1);else if(e.key==='ArrowLeft'||e.key==='PageUp')goTo(cur-1);else if(e.key==='Home')goTo(0);else if(e.key==='End')goTo(total-1);});
+  let sx=null;
+  window.addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
+  window.addEventListener('touchend',e=>{if(sx===null)return;const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50){dx<0?goTo(cur+1):goTo(cur-1)}sx=null;},{passive:true});
+  goTo(0);
+</script>
+</body>
+</html>
